@@ -178,7 +178,7 @@ let renderErrorResponse = (response) => {
         if (error) {
             response.status(500);
             response.json({
-                message: error
+                message: error.message
             });
         }
     };
