@@ -1,28 +1,35 @@
+process.env.NODE_ENV = "test";
+
+
+
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-// const app = require('../app');
-const base_url= "http://localhost:3000";
-const should = chai.should();
-process.env.NODE_ENV = 'test';
-const User = require('./../models/user');
 
-chai.use(chaiHttp)
+const sinon = require("sinon");
+const should = chai.should();
+chai.use(chaiHttp);
+var mysql = require('mysql');
+
+
+const server = require('./../server');
 
 describe('/POST user', () => {
-    it('it sould post the user info', (done) => {
+    it('it should post the user info', (done) => {
         const user = {
             user:{
-                firstName: " Husne Ara1",
-                lastName: "Asma1",
-                email: "asma1@gmail.com",
-                password:"password1"
+                firstName: " Husne Ara",
+                lastName: "Asma",
+                email: "asma6@gmail.com",
+                password:"Husne Ara"
             }
-
         };
-        chai.request(base_url)
+        
+
+        chai.request(server)
         .post('/users')
         .send(user)
         .end((err, res) => {
+            // console.log(res)
             res.should.have.status(200);
             res.body.should.be.a('object');
             res.body.should.have.property('id');
@@ -35,4 +42,3 @@ describe('/POST user', () => {
         });
     });
 });
-
