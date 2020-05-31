@@ -23,5 +23,17 @@ module.exports = (sequelize,DataTypes)=>{
             autoIncrement: true
         }
     })
+
+    user.associate = models => {
+        user.hasMany(models.Book,{
+            foreignKey: 'sellerId',
+            onDelete: "cascade",
+            onUpdate: "cascade",
+        });
+        user.hasOne(models.Cart,{
+            onDelete: "cascade",
+            onUpdate: "cascade",
+        })
+    }
     return user;
 }
