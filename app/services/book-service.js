@@ -26,27 +26,33 @@ exports.save = (bookDetails,result) => {
       });
 
 };
-
 /**
- * Adds Authors To Project object.
+ * Find Books belonging to seller using seller id.
  *
  * @param user
  */
-
-// exports.addAuthorToProjects = (book,authors) => {
-//   // let authorsList = authors.split(",");
-//   // console.log(authorsList);
-//   return book.addAuthors(authorsList);
-//   //  return db.Book.create({
-//   //       isbn: bookDetails.book.isbn,
-//   //       title: bookDetails.book.title,
-//   //       quantity:bookDetails.book.quantity,
-//   //       price:bookDetails.book.price,
-//   //       publication_date:bookDetails.book.publication_date,
-//   //       sellerId:bookDetails.sellerId
-//   //     });
-
-// };
+exports.findBySellerId = (sellerId) => {
+  return  db.Book.findAll({
+      where:{
+          sellerId:sellerId
+      },
+      include: [ db.User_tbl, db.Author ]
+      
+  })
+};
+/**
+ * Delete Book belonging to seller using book id.
+ *
+ * @param user
+ */
+exports.delete = (bookid) => {
+  return  db.Book.destroy({
+      where:{
+          id:bookid
+      }
+      
+  })
+};
 // /**
 //  * Find user object using email.
 //  *
@@ -68,15 +74,7 @@ exports.save = (bookDetails,result) => {
 //  * @param user
 //  */
 
-exports.findBySellerId = (sellerId) => {
-    return  db.Book.findAll({
-        where:{
-            sellerId:sellerId
-        },
-        include: [ db.User_tbl, db.Author ]
-        
-    })
-};
+
 // /**
 //  * Update user object.
 //  *

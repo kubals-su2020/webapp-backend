@@ -1,5 +1,5 @@
 'use strict';
-const db = require("./../../models")
+// const db = require("./../../models")
 /**
  * Saves the new user object.
  *
@@ -7,27 +7,27 @@ const db = require("./../../models")
  */
 
 exports.save = (user,result) => {
-    console.log("here")
-    // var first_name = user.first_name;
-    // var last_name = user.last_name;
-    // var email = user.email;
-    // var hashed_password = user.password;
+    // console.log("here")
+    var first_name = user.first_name;
+    var last_name = user.last_name;
+    var email = user.email;
+    var hashed_password = user.hashed_password;
 
-   return db.User_tbl.create({
-        first_name: user.first_name,
-        last_name:user.last_name,
-        email:user.email,
-        hashed_password:user.hashed_password
-      })
-    // let queryString = "INSERT INTO `user` (first_name, last_name, email, password) VALUES ('" +
-    //         first_name + "', '" + last_name + "', '" + email + "', '" + password + "')";
-    // return new Promise( ( resolve, reject ) => {
-    //     db.query( queryString, ( err, rows ) => {
-    //         if ( err )
-    //             return reject( err );
-    //         resolve( rows );
-    //     } );
-    // } );
+//    return db.User_tbl.create({
+//         first_name: user.first_name,
+//         last_name:user.last_name,
+//         email:user.email,
+//         hashed_password:user.hashed_password
+//       })
+    let queryString = "INSERT INTO `user` (first_name, last_name, email, hashed_password) VALUES ('" +
+            first_name + "', '" + last_name + "', '" + email + "', '" + hashed_password + "')";
+    return new Promise( ( resolve, reject ) => {
+        db.query( queryString, ( err, rows ) => {
+            if ( err )
+                return reject( err );
+            resolve( rows );
+        } );
+    } );
 
 };
 /**
@@ -38,21 +38,21 @@ exports.save = (user,result) => {
 
 exports.findByUsername = (user,result) => {
     var email = user.email;
-    console.log(email)
-   return  db.User_tbl.findAll({
-        where:{
-            email:user.email
-        }
-    })
-    // console.log(email)
-    // let queryString = "SELECT * FROM user WHERE email = '"+ email +"'";
-    // return new Promise( ( resolve, reject ) => {
-    //     db.query( queryString, ( err, result ) => {
-    //         if ( err )
-    //             return reject( err );
-    //         resolve( result );
-    //     } );
-    // } );
+//     console.log(email)
+//    return  db.User_tbl.findAll({
+//         where:{
+//             email:user.email
+//         }
+//     })
+    //  console.log(email)
+    let queryString = "SELECT * FROM user WHERE email = '"+ email +"'";
+    return new Promise( ( resolve, reject ) => {
+        db.query( queryString, ( err, result ) => {
+            if ( err )
+                return reject( err );
+            resolve( result );
+        } );
+    } );
 
 };
 /**
@@ -62,19 +62,19 @@ exports.findByUsername = (user,result) => {
  */
 
 exports.findById = (id,result) => {
-    // let queryString = "SELECT * FROM user WHERE id = '"+ id +"'";
-    // return new Promise( ( resolve, reject ) => {
-    //     db.query( queryString, ( err, result ) => {
-    //         if ( err )
-    //             return reject( err );
-    //         resolve( result );
-    //     } );
-    // } );
-    return  db.User_tbl.findAll({
-        where:{
-            id:user.id
-        }
-    })
+    let queryString = "SELECT * FROM user WHERE id = '"+ id +"'";
+    return new Promise( ( resolve, reject ) => {
+        db.query( queryString, ( err, result ) => {
+            if ( err )
+                return reject( err );
+            resolve( result );
+        } );
+    } );
+    // return  db.User_tbl.findAll({
+    //     where:{
+    //         id:user.id
+    //     }
+    // })
 };
 /**
  * Update user object.
@@ -83,23 +83,23 @@ exports.findById = (id,result) => {
  */
 
 exports.update = (user,result) => {
-    // let queryString = "UPDATE user SET first_name = ?, last_name =?, password =? WHERE id=?";
-    // return new Promise( ( resolve, reject ) => {
-    //     db.query( queryString,
-    //         [user.first_name,user.last_name,user.password,user.id],
-    //          ( err, result ) => {
-    //         if ( err )
-    //             return reject( err );
-    //         resolve( result );
-    //     } );
-    // } );
-    return db.User_tbl.update({
-        first_name : user.first_name,
-        last_name: user.last_name,
-        hashed_password:user.hashed_password
-    },{
-        where:{
-            id:user.id
-        }
-    })
+    let queryString = "UPDATE user SET first_name = ?, last_name =?, hashed_password =? WHERE id=?";
+    return new Promise( ( resolve, reject ) => {
+        db.query( queryString,
+            [user.first_name,user.last_name,user.hashed_password,user.id],
+             ( err, result ) => {
+            if ( err )
+                return reject( err );
+            resolve( result );
+        } );
+    } );
+    // return db.User_tbl.update({
+    //     first_name : user.first_name,
+    //     last_name: user.last_name,
+    //     hashed_password:user.hashed_password
+    // },{
+    //     where:{
+    //         id:user.id
+    //     }
+    // })
 };

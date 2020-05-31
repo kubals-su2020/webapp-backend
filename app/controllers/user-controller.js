@@ -52,7 +52,7 @@ exports.login = (request, response) => {
     };
     promise
     .then((val)=>{
-        
+            console.log(val)
             if(val.length < 1){
 
                  response.status(401).json({

@@ -35,12 +35,14 @@ module.exports = (sequelize,DataTypes)=>{
     book.associate = models => {
         book.belongsTo(models.User_tbl);
         book.hasMany(models.Author,{
-            onDelete: "cascade",
-            onUpdate: "cascade",
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE",
+            hooks: true,
         });
         book.hasMany(models.Entry,{
-            onDelete: "cascade",
-            onUpdate: "cascade",
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE",
+
         });
     }
     // book.associate = models => {

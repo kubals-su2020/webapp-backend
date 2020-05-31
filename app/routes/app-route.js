@@ -14,7 +14,9 @@ module.exports = (app) => {
     app.route('/book')
         .post(authorize,bookController.saveBook)
     app.route('/books/seller')
-        .get(authorize,bookController.getAllMyBooks);
+        .get(authorize,bookController.getAllMyBooks)
+    app.route('/books/seller/:bookid')
+        .delete(authorize,bookController.deleteBook);
 
 
 };
