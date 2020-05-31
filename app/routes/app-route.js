@@ -12,8 +12,9 @@ module.exports = (app) => {
         .get(authorize,userController.getProfile)
         .put(authorize,userController.updateProfile)
     app.route('/book')
-        .post(authorize,bookController.saveBook);
-    app.route('/books')
-        .get(bookController.getAllBooks)
+        .post(authorize,bookController.saveBook)
+    app.route('/books/seller')
+        .get(authorize,bookController.getAllMyBooks);
+
 
 };

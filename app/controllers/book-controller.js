@@ -37,18 +37,40 @@ exports.saveBook = (request, response) => {
         })
     .catch(renderErrorResponse(response));
 };
-
-exports.getAllBooks = (request, response) => {
-    const promise = bookService.findById();
+/**
+ * get all my books sets the response.
+ *
+ * @param request
+ * @param response
+ */
+//creates a new book
+exports.getAllMyBooks = (request, response) => {
+    const promise =userService.findByUsername(request.user);
+    
     const result = (user) => {
         response.status(200);
         response.json(user);
     };
+
     promise
     .then((val)=>{
-        console.log(val)
-        result(val[0]);
-    })
+            if(val.length < 1){
+                return response.status(404).json({
+                    message: "User not found"
+                });
+            }
+            else{
+                const promiseBookBySeller = bookService.findBySellerId(val[0].id);
+                promiseBookBySeller
+                .then((books)=>{
+                    result(books);
+                    //  let authorPromise = bookService.addAuthorToProjects(book,request.body.book.authors)
+                })
+                .catch(renderErrorResponse(response))  
+                
+            }
+
+        })
     .catch(renderErrorResponse(response));
 }
 /**

@@ -68,10 +68,10 @@ exports.save = (bookDetails,result) => {
 //  * @param user
 //  */
 
-exports.findById = () => {
+exports.findBySellerId = (sellerId) => {
     return  db.Book.findAll({
         where:{
-            id:1
+            sellerId:sellerId
         },
         include: [ db.User_tbl, db.Author ]
         
