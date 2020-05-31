@@ -24,24 +24,6 @@ exports.save = (bookDetails,result) => {
       } );
   } );
 
-  
-  // let queryString = "INSERT INTO `book` (isbn, title, quantity, price,publication_date,seller_id) VALUES ('" +
-  //   bookDetails.book.isbn + "', '" +
-  //   bookDetails.book.title + "', '" + 
-  //   bookDetails.book.quantity + "', '" +
-  //   bookDetails.book.price + "', '" + 
-  //   bookDetails.book.published_date + "', '" + 
-  //   bookDetails.book.seller.id +"')";
-  //   return new Promise( ( resolve, reject ) => {
-  //       db.query( queryString, ( err, rows ) => {
-  //         if ( err )
-  //             return reject( err );
-  //         resolve( rows );
-  //       } );
-  //   } );
-
-
-    
   //  return db.Book.create({
   //       isbn: bookDetails.book.isbn,
   //       title: bookDetails.book.title,
@@ -88,12 +70,20 @@ exports.findBySellerId = (sellerId) => {
  * @param user
  */
 exports.delete = (bookid) => {
-  return  db.Book.destroy({
-      where:{
-          id:bookid
-      }
+  let queryString = `DELETE FROM book WHERE id = `+ bookid;
+  return new Promise( ( resolve, reject ) => {
+    db.query( queryString, ( err, result ) => {
+        if ( err )
+            return reject( err );
+        resolve( result );
+    } );
+} );
+  // return  db.Book.destroy({
+  //     where:{
+  //         id:bookid
+  //     }
       
-  })
+  // })
 };
 // /**
 //  * Find user object using email.

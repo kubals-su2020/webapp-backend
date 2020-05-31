@@ -30,7 +30,6 @@ exports.saveBook = (request, response) => {
                     let saveAuthorsPromise = authorService.save(request.body,book);
                     saveAuthorsPromise
                     .then((authors)=>{
-                        console.log(authors)
                         result(book);
                     })
                     .catch(renderErrorResponse(response))  
@@ -103,7 +102,6 @@ exports.deleteBook = (request, response) => {
                 });
             }
             else{
-                console.log("param:"+request.params.bookid)
                 const promiseDeleteBook = bookService.delete(request.params.bookid);
                 promiseDeleteBook
                 .then((books)=>{
