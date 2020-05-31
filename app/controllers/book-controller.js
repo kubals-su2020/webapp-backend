@@ -2,7 +2,7 @@
 
 const userService = require('./../services/user-service');
 const bookService = require('./../services/book-service');
-
+const authorService = require('./../services/author-service');
 /**
  * Creates a new book and sets the response.
  *
@@ -27,8 +27,15 @@ exports.saveBook = (request, response) => {
                 let saveBookPromise = bookService.save(request.body);
                 saveBookPromise
                 .then((book)=>{
-                    result(book);
-                    //  let authorPromise = bookService.addAuthorToProjects(book,request.body.book.authors)
+                    let saveAuthorsPromise = authorService.save(request.body,book);
+                    saveAuthorsPromise
+                    .then((authors)=>{
+                        console.log(authors)
+                        result(book);
+                    })
+                    .catch(renderErrorResponse(response))  
+                    // result(book);
+                   
                 })
                 .catch(renderErrorResponse(response))  
                 
@@ -64,7 +71,7 @@ exports.getAllMyBooks = (request, response) => {
                 promiseBookBySeller
                 .then((books)=>{
                     result(books);
-                    //  let authorPromise = bookService.addAuthorToProjects(book,request.body.book.authors)
+                    
                 })
                 .catch(renderErrorResponse(response))  
                 

@@ -1,6 +1,6 @@
 'use strict';
-const db = require("./../../models")
-var moment = require('moment');
+// const db = require("./../../models")
+// var moment = require('moment');
 /**
  * Saves the new book object.
  *
@@ -8,22 +8,56 @@ var moment = require('moment');
  */
 
 exports.save = (bookDetails,result) => {
-   return db.Book.create({
-        isbn: bookDetails.book.isbn,
-        title: bookDetails.book.title,
-        quantity:bookDetails.book.quantity,
-        price:bookDetails.book.price,
-        publication_date:bookDetails.book.published_date,
+  let queryString = "INSERT INTO book (isbn, title, quantity, price,publication_date,seller_id) VALUES (?,?,?,?,?,?)";
+  return new Promise( ( resolve, reject ) => {
+      db.query( queryString,
+          [bookDetails.book.isbn,
+            bookDetails.book.title,
+            bookDetails.book.quantity,
+            bookDetails.book.price,
+            bookDetails.book.published_date,
+            bookDetails.book.seller.id],
+           ( err, result ) => {
+          if ( err )
+              return reject( err );
+          resolve( result );
+      } );
+  } );
+
+  
+  // let queryString = "INSERT INTO `book` (isbn, title, quantity, price,publication_date,seller_id) VALUES ('" +
+  //   bookDetails.book.isbn + "', '" +
+  //   bookDetails.book.title + "', '" + 
+  //   bookDetails.book.quantity + "', '" +
+  //   bookDetails.book.price + "', '" + 
+  //   bookDetails.book.published_date + "', '" + 
+  //   bookDetails.book.seller.id +"')";
+  //   return new Promise( ( resolve, reject ) => {
+  //       db.query( queryString, ( err, rows ) => {
+  //         if ( err )
+  //             return reject( err );
+  //         resolve( rows );
+  //       } );
+  //   } );
+
+
+    
+  //  return db.Book.create({
+  //       isbn: bookDetails.book.isbn,
+  //       title: bookDetails.book.title,
+  //       quantity:bookDetails.book.quantity,
+  //       price:bookDetails.book.price,
+  //       publication_date:bookDetails.book.published_date,
         
-        // bookDetails.book.publication_date,
-        sellerId:bookDetails.book.seller.id,
-        // User_tbl:bookDetails.book.seller,
-        Authors :bookDetails.book.authors,
-      },
-      {
-        // association: [db.User_tbl],
-        include: [ db.Author ]
-      });
+  //       // bookDetails.book.publication_date,
+  //       sellerId:bookDetails.book.seller.id,
+  //       // User_tbl:bookDetails.book.seller,
+  //       Authors :bookDetails.book.authors,
+  //     },
+  //     {
+  //       // association: [db.User_tbl],
+  //       include: [ db.Author ]
+  //     });
 
 };
 /**
@@ -32,13 +66,21 @@ exports.save = (bookDetails,result) => {
  * @param user
  */
 exports.findBySellerId = (sellerId) => {
-  return  db.Book.findAll({
-      where:{
-          sellerId:sellerId
-      },
-      include: [ db.User_tbl, db.Author ]
+  let queryString = "SELECT * FROM book WHERE seller_id = '"+ sellerId +"'";
+  return new Promise( ( resolve, reject ) => {
+      db.query( queryString, ( err, result ) => {
+          if ( err )
+              return reject( err );
+          resolve( result );
+      } );
+  } );
+  // return  db.Book.findAll({
+  //     where:{
+  //         sellerId:sellerId
+  //     },
+  //     include: [ db.User_tbl, db.Author ]
       
-  })
+  // })
 };
 /**
  * Delete Book belonging to seller using book id.
