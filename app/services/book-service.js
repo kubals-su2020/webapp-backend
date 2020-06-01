@@ -109,3 +109,22 @@ exports.update = (bookDetails,bookId) => {
   } );
 
 };
+
+
+
+
+/**
+ * Find Books belonging to other sellers.
+ *
+ * @param user
+ */
+exports.findByOtherSellers = (sellerId) => {
+  let queryString = "SELECT * FROM book WHERE seller_id != '"+ sellerId +"'";
+  return new Promise( ( resolve, reject ) => {
+      db.query( queryString, ( err, result ) => {
+          if ( err )
+              return reject( err );
+          resolve( result );
+      } );
+  } );
+}

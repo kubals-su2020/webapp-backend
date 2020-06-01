@@ -17,7 +17,7 @@ module.exports = (app) => {
         .get(authorize,bookController.getAllMyBooks)
     app.route('/books/seller/:bookid')
         .delete(authorize,bookController.deleteBook)
-        .put(authorize,bookController.updateBook);
-
-
+        .put(authorize,bookController.updateBook)
+    app.route('/books/others')
+        .get(authorize,bookController.getAllOthersBooks);
 };
