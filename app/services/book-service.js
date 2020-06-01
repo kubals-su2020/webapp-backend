@@ -128,3 +128,26 @@ exports.findByOtherSellers = (sellerId) => {
       } );
   } );
 }
+
+
+
+
+/**
+ * Find Books belonging to other sellers.
+ *
+ * @param user
+ */
+exports.findByBookInCartAndAdd = (cart) => {
+    // console.log(cart);
+    // console.log("new serv")
+    let queryString = "SELECT * FROM book WHERE id = "+ cart.book_id;
+    return new Promise( ( resolve, reject ) => {
+        db.query( queryString, ( err, result ) => {
+            if ( err )
+                return reject( err );
+            // console.log(result)
+            cart.book = result;
+            resolve( cart );
+        } );
+    } );
+  }

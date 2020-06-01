@@ -23,5 +23,7 @@ module.exports = (app) => {
         .get(authorize,bookController.getAllOthersBooks)
     app.route('/cart')
         .put(authorize,cartEntryController.updateCart)
-        .get(authorize,cartEntryController.getCartByUserId);
+        .get(authorize,cartEntryController.getCartByUserId)
+    app.route('/cart/details')
+        .get(authorize,cartEntryController.getCartBookDetailsByUserId);
 };
