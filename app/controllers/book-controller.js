@@ -164,7 +164,7 @@ exports.updateBook = (request, response) => {
             });
         }
         else{
-            console.log(request.body)
+            // console.log(request.body)
             let updateBookPromise = bookService.update(request.body,request.params.bookid);
             updateBookPromise
             .then((book)=>{
@@ -204,6 +204,7 @@ exports.updateBook = (request, response) => {
 //creates a new book
 exports.getAllOthersBooks = (request, response) => {
     const promise =userService.findByUsername(request.user);
+    // console.log("ok1")
     const result = (user) => {
         response.status(200);
         response.json(user);
@@ -220,6 +221,7 @@ exports.getAllOthersBooks = (request, response) => {
                 const promiseBookBySeller = bookService.findByOtherSellers(val[0].id);
                 promiseBookBySeller
                 .then((books)=>{
+                    // console.log(books)
                     let promiseBooks =[];
                     for(let b in books){
                        let tempPromise = authorService.findByBookAndAddAuthors(books[b]);

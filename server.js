@@ -62,10 +62,10 @@ db.connect(function(err) {
         'REFERENCES user (id)'+
         'ON UPDATE CASCADE ON DELETE CASCADE)';
     let createCartEntriesTbl = 'create table if not exists cart_entry(' +
-        'id int not null primary key auto_increment unique,' +
         'quantity int not null ,' +
         'cart_id int,' +
         'book_id int,' +
+        'PRIMARY KEY (cart_id, book_id),'+
         'FOREIGN KEY (cart_id)'+
         'REFERENCES cart (id)'+
         'ON UPDATE CASCADE ON DELETE CASCADE, '+

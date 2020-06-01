@@ -1,6 +1,7 @@
 'use strict';
 
 const userService = require('./../services/user-service');
+const cartService = require('./../services/cart-service');
 const jwt = require("jsonwebtoken");
 
 const bcrypt = require('bcrypt');
@@ -30,7 +31,10 @@ exports.saveUser = (request, response) => {
         const promise = userService.save(user);
 
         promise
-            .then(result)
+            .then((val)=>{
+                cartService.save(val)
+                result(val)
+            })
             .catch(renderErrorResponse(response));
     });
 

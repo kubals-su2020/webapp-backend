@@ -1,7 +1,8 @@
 'use strict';
 
 const userController = require('./../controllers/user-controller');
-const bookController = require('./../controllers/book-controller')
+const bookController = require('./../controllers/book-controller');
+const cartEntryController = require('./../controllers/cart-entry-controller');
 const authorize = require("../middlewares/auth");
 //API's for routing to a specified request
 module.exports = (app) => {
@@ -19,5 +20,8 @@ module.exports = (app) => {
         .delete(authorize,bookController.deleteBook)
         .put(authorize,bookController.updateBook)
     app.route('/books/others')
-        .get(authorize,bookController.getAllOthersBooks);
+        .get(authorize,bookController.getAllOthersBooks)
+    app.route('/cart')
+        .put(authorize,cartEntryController.updateCart)
+        .get(authorize,cartEntryController.getCartByUserId);
 };
