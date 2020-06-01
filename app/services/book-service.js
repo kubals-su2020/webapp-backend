@@ -146,7 +146,7 @@ exports.findByBookInCartAndAdd = (cart) => {
             if ( err )
                 return reject( err );
             // console.log(result)
-            cart.book = result;
+            cart.book = result[0];
             resolve( cart );
         } );
     } );
