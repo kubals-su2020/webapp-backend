@@ -24,15 +24,24 @@ exports.saveBook = (request, response) => {
                 });
             }
             else{
+                
                 let saveBookPromise = bookService.save(request.body);
                 saveBookPromise
                 .then((book)=>{
-                    let saveAuthorsPromise = authorService.save(request.body,book);
-                    saveAuthorsPromise
+
+                    let deleteAuthorPromise = authorService.deleteByBookId(book.insertId);
+                    deleteAuthorPromise
                     .then((authors)=>{
-                        result(book);
+                        let saveAuthorsPromise = authorService.save(request.body,book.insertId);
+                        saveAuthorsPromise
+                        .then((authors)=>{
+                            result(book);
+                        })
+                        .catch(renderErrorResponse(response))  
                     })
-                    .catch(renderErrorResponse(response))  
+                    .catch(renderErrorResponse(response))
+
+
                     // result(book);
                    
                 })
@@ -69,8 +78,23 @@ exports.getAllMyBooks = (request, response) => {
                 const promiseBookBySeller = bookService.findBySellerId(val[0].id);
                 promiseBookBySeller
                 .then((books)=>{
-                    result(books);
+                    let promiseBooks =[];
+                    for(let b in books){
+                       let tempPromise = authorService.findByBookAndAddAuthors(books[b]);
+                       promiseBooks.push(tempPromise);
+                    }
+                    Promise.all(promiseBooks)
+                    .then((values) => {
+                        result(values)
+                      })
+                    .catch(renderErrorResponse(response));
+                    // result(books);
                     
+
+                    // let test = authorService.findByBookAndAddAuthors(books[15]);
+                    // test.then((v)=>{
+                    //     console.log(v)
+                    // })
                 })
                 .catch(renderErrorResponse(response))  
                 
@@ -115,6 +139,55 @@ exports.deleteBook = (request, response) => {
         })
     .catch(renderErrorResponse(response));
 }
+
+
+
+
+/**
+ * Get user and update book and sets the response.
+ *
+ * @param request
+ * @param response
+ */
+//Update user profile
+exports.updateBook = (request, response) => {
+    const promise =userService.findByUsername(request.user);
+    const result = (user) => {
+        response.status(200);
+        response.json(user);
+    };
+    promise
+    .then((val)=>{
+        if(val.length < 1){
+            return response.status(404).json({
+                message: "User not found"
+            });
+        }
+        else{
+            console.log(request.body)
+            let updateBookPromise = bookService.update(request.body,request.params.bookid);
+            updateBookPromise
+            .then((book)=>{
+                let deleteAuthorPromise = authorService.deleteByBookId(request.params.bookid);
+                deleteAuthorPromise
+                .then((authors)=>{
+                    let saveAuthorsPromise = authorService.save(request.body,request.params.bookid);
+                    saveAuthorsPromise
+                    .then((authors)=>{
+                        result(book);
+                    })
+                    .catch(renderErrorResponse(response))  
+                })
+                .catch(renderErrorResponse(response))
+               
+            })
+            .catch(renderErrorResponse(response))  
+            
+        }
+
+        })
+    .catch(renderErrorResponse(response));
+};
 /**
  * Throws error if error object is present.
  *

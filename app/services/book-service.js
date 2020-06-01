@@ -69,8 +69,8 @@ exports.findBySellerId = (sellerId) => {
  *
  * @param user
  */
-exports.delete = (bookid) => {
-  let queryString = `DELETE FROM book WHERE id = `+ bookid;
+exports.delete = (bookId) => {
+  let queryString = `DELETE FROM book WHERE id = `+ bookId;
   return new Promise( ( resolve, reject ) => {
     db.query( queryString, ( err, result ) => {
         if ( err )
@@ -85,42 +85,27 @@ exports.delete = (bookid) => {
       
   // })
 };
-// /**
-//  * Find user object using email.
-//  *
-//  * @param user
-//  */
+/**
+ * Updated a book object.
+ *
+ * @param user
+ */
 
-// exports.findByUsername = (user,result) => {
-//     var email = user.email;
-//     console.log(email)
-//    return  db.User_tbl.findAll({
-//         where:{
-//             email:user.email
-//         }
-//     })
-// };
-// /**
-//  * Find user object using id.
-//  *
-//  * @param user
-//  */
+exports.update = (bookDetails,bookId) => {
+  let queryString = "UPDATE book SET isbn=?, title=?, quantity=?, price=?,publication_date=? where id=?";
+  return new Promise( ( resolve, reject ) => {
+      db.query( queryString,
+          [bookDetails.book.isbn,
+            bookDetails.book.title,
+            bookDetails.book.quantity,
+            bookDetails.book.price,
+            new Date(bookDetails.book.published_date),
+            bookId],
+           ( err, result ) => {
+          if ( err )
+              return reject( err );
+          resolve( result );
+      } );
+  } );
 
-
-// /**
-//  * Update user object.
-//  *
-//  * @param user
-//  */
-
-// exports.update = (user,result) => {
-//     return db.User_tbl.update({
-//         first_name : user.first_name,
-//         last_name: user.last_name,
-//         hashed_password:user.hashed_password
-//     },{
-//         where:{
-//             id:user.id
-//         }
-//     })
-// };
+};
