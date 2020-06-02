@@ -8,7 +8,7 @@
  */
 
 exports.save = (bookDetails,result) => {
-  let queryString = "INSERT INTO book (isbn, title, quantity, price,publication_date,seller_id) VALUES (?,?,?,?,?,?)";
+  let queryString = "INSERT INTO book (isbn, title, quantity, price,publication_date,created_on,updated_on,seller_id) VALUES (?,?,?,?,?,?,?,?)";
   return new Promise( ( resolve, reject ) => {
       db.query( queryString,
           [bookDetails.book.isbn,
@@ -16,6 +16,8 @@ exports.save = (bookDetails,result) => {
             bookDetails.book.quantity,
             bookDetails.book.price,
             bookDetails.book.published_date,
+            new Date(),
+            new Date(),
             bookDetails.book.seller.id],
            ( err, result ) => {
           if ( err )
@@ -92,7 +94,7 @@ exports.delete = (bookId) => {
  */
 
 exports.update = (bookDetails,bookId) => {
-  let queryString = "UPDATE book SET isbn=?, title=?, quantity=?, price=?,publication_date=? where id=?";
+  let queryString = "UPDATE book SET isbn=?, title=?, quantity=?, price=?,publication_date=?,updated_on=? where id=?";
   return new Promise( ( resolve, reject ) => {
       db.query( queryString,
           [bookDetails.book.isbn,
@@ -100,6 +102,7 @@ exports.update = (bookDetails,bookId) => {
             bookDetails.book.quantity,
             bookDetails.book.price,
             new Date(bookDetails.book.published_date),
+            new Date(),
             bookId],
            ( err, result ) => {
           if ( err )

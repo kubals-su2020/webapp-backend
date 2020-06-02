@@ -43,6 +43,8 @@ db.connect(function(err) {
         'quantity int not null,' +
         'price double not null,'+
         'publication_date datetime NOT NULL,'+
+        'created_on datetime NOT NULL,'+
+        'updated_on datetime NOT NULL,'+
         'seller_id int,'+
         'FOREIGN KEY (seller_id)'+
         'REFERENCES user (id))';
