@@ -3,6 +3,7 @@
 const userController = require('./../controllers/user-controller');
 const bookController = require('./../controllers/book-controller');
 const cartEntryController = require('./../controllers/cart-entry-controller');
+const cartController = require('./../controllers/cart-controller');
 const authorize = require("../middlewares/auth");
 //API's for routing to a specified request
 module.exports = (app) => {
@@ -25,5 +26,7 @@ module.exports = (app) => {
         .put(authorize,cartEntryController.updateCart)
         .get(authorize,cartEntryController.getCartByUserId)
     app.route('/cart/details')
-        .get(authorize,cartEntryController.getCartBookDetailsByUserId);
+        .get(authorize,cartEntryController.getCartBookDetailsByUserId)
+    app.route('/cart/submit')
+        .post(authorize,cartController.saveCart);
 };

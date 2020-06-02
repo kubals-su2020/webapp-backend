@@ -47,6 +47,7 @@ exports.updateCart = (request, response) => {
 //Get cart for user
 
 exports.getCartByUserId = (request, response) => {
+    // console.log("get cart")
     const promise =userService.findByUsername(request.user);
     const result = (user) => {
         response.status(200);
@@ -63,7 +64,7 @@ exports.getCartByUserId = (request, response) => {
             const cartServicePromise = cartService.getCartByUserId(val[0])
             cartServicePromise
             .then((cart)=>{
-                // console.log(cart[0])
+                //  console.log(cart[0])
                 const cartEntryPromise = cartEntryService.getCartByCartId(cart);
                 cartEntryPromise
                 .then((cartEntries)=>{

@@ -154,3 +154,45 @@ exports.findByBookInCartAndAdd = (cart) => {
         } );
     } );
   }
+
+
+  /**
+ * Find Books by book id.
+ *
+ * @param user
+ */
+exports.findByBookId = (cartEntry) => {
+    // console.log(cartEntry)
+    let queryString = "SELECT * FROM book WHERE  id= '"+ cartEntry.book.id +"'";
+    return new Promise( ( resolve, reject ) => {
+        db.query( queryString, ( err, result ) => {
+            if ( err )
+                return reject( err );
+            cartEntry.bookWithSeller = result[0];
+            resolve( cartEntry );
+        } );
+    } );
+}
+
+  /**
+ * Update Books quantity 
+ *
+ * @param user
+ */
+exports.updateBookQuantity = (cartEntry) => {
+     console.log("in update book quantity")
+    //  console.log(cartEntry)
+    let newQuantity = cartEntry.bookWithSeller.quantity;
+    newQuantity = newQuantity - cartEntry.quantity;
+    let queryString = "UPDATE book SET quantity=? where id=?";
+    return new Promise( ( resolve, reject ) => {
+        db.query( queryString,
+            [newQuantity,
+              cartEntry.bookWithSeller.id],
+             ( err, result ) => {
+            if ( err )
+                return reject( err );
+            resolve( result );
+        } );
+    } );
+}

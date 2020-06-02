@@ -25,7 +25,7 @@ exports.save = (user) => {
  */
 
 exports.getCartByUserId = (user) => {
-    // console.log(user)
+    //  console.log(user)
     let queryString = "SELECT * FROM cart WHERE buyer_id = '"+ user.id +"'";
     return new Promise( ( resolve, reject ) => {
         db.query( queryString, ( err, result ) => {

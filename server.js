@@ -40,8 +40,8 @@ db.connect(function(err) {
         'id int not null primary key auto_increment unique,' +
         'isbn varchar(255)not null,' +
         'title varchar(255) not null,' +
-        'quantity int not null,' +
-        'price double not null,'+
+        'quantity int not null check(quantity >= 0 and quantity <= 999),' +
+        'price double not null check(price >= 0.01 and price <= 9999.99),'+
         'publication_date datetime NOT NULL,'+
         'created_on datetime NOT NULL,'+
         'updated_on datetime NOT NULL,'+
