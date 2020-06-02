@@ -4,6 +4,7 @@ const userService = require('./../services/user-service');
 const cartEntryService = require('./../services/cart-entry-service');
 const cartService = require('./../services/cart-service');
 const bookService = require('./../services/book-service');
+const authorService = require('./../services/author-service');
 /**
  * Get cart and update cart and sets the response.
  *
@@ -117,8 +118,20 @@ exports.getCartBookDetailsByUserId = (request, response) => {
                        promiseCartBooks.push(tempPromise);
                     }
                     Promise.all(promiseCartBooks)
-                    .then((values) => {
-                        result(values)
+                    .then((bookDetails) => {
+                        let promiseBooks =[];
+                        for(let b in bookDetails){
+                           let tempPromise2 = authorService.findByBookAndAddAuthorsV2(bookDetails[b]);
+                           promiseBooks.push(tempPromise2);
+                        }
+                        Promise.all(promiseBooks)
+                        .then((values) => {
+                            result(values)
+                          })
+                        .catch(renderErrorResponse(response));
+
+
+                        // result(values)
                       })
                     .catch(renderErrorResponse(response));
                 })
