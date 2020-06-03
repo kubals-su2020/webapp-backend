@@ -18,8 +18,8 @@ app.use(bodyParser.urlencoded({
 var db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "test@123",
-    database: "tdb_dev"
+    password: "rootpw",
+    database: "tdb_test"
 });
 db.connect(function(err) {
     if (err) throw err;
