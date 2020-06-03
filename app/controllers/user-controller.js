@@ -56,7 +56,7 @@ exports.login = (request, response) => {
     };
     promise
     .then((val)=>{
-            console.log(val)
+            // console.log(val)
             if(val.length < 1){
 
                  response.status(401).json({
@@ -141,7 +141,7 @@ exports.updateProfile = (request, response) => {
                 });
             }
             let user = val[0];
-            
+            // console.log(request.body)
             // only update fields that were actually passed...
             if(typeof request.body.user.firstName !== 'undefined'){
                 user.first_name = request.body.user.firstName;
@@ -150,23 +150,40 @@ exports.updateProfile = (request, response) => {
                 user.last_name = request.body.user.lastName;
             }
             if(typeof request.body.user.password !== 'undefined'){
+                // console.log("1")
                 user.hashed_password = request.body.user.password;
+                bcrypt.hash(user.hashed_password, saltRounds, function(err, hash) {
+                    // console.log(user.hashed_password)
+                    let user1 = {
+                        id: user.id,
+                        first_name : user.first_name,
+                        last_name : user.last_name,
+                        email : user.email,
+                        hashed_password : hash
+                    }
+                    const promiseUpdate = userService.update(user1);
+                    promiseUpdate
+                    .then((val)=>{
+                        result(val[0]);
+                    })
+                    .catch(renderErrorResponse(response))
+                });
             }
-            bcrypt.hash(user.hashed_password, saltRounds, function(err, hash) {
+            else{
+                // console.log("2")
                 let user1 = {
                     id: user.id,
                     first_name : user.first_name,
                     last_name : user.last_name,
-                    email : user.email,
-                    hashed_password : hash
+                    email : user.email
                 }
-                const promiseUpdate = userService.update(user1);
+                const promiseUpdate = userService.updateFew(user1);
                 promiseUpdate
                 .then((val)=>{
                     result(val[0]);
                 })
                 .catch(renderErrorResponse(response))
-            });
+            }
 
         })
     .catch(renderErrorResponse(response));

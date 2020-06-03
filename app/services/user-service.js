@@ -103,3 +103,22 @@ exports.update = (user,result) => {
     //     }
     // })
 };
+
+/**
+ * Update user object.
+ *
+ * @param user
+ */
+
+exports.updateFew = (user,result) => {
+    let queryString = "UPDATE user SET first_name = ?, last_name =? WHERE id=?";
+    return new Promise( ( resolve, reject ) => {
+        db.query( queryString,
+            [user.first_name,user.last_name,user.id],
+             ( err, result ) => {
+            if ( err )
+                return reject( err );
+            resolve( result );
+        } );
+    } );
+}
