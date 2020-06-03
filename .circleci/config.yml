@@ -39,8 +39,8 @@ jobs:
       - image: circleci/node:13.11.0
       - image: circleci/mysql:8.0.20
         environment:
-          MYSQL_ROOT_PASSWORD: rootpw
-          MYSQL_DATABASE: tdb_test
+          MYSQL_ROOT_PASSWORD: test@123
+          MYSQL_DATABASE: tdb_dev
           MYSQL_USER: user
           MYSQL_PASSWORD: passw0rd
     steps:
