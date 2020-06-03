@@ -1,4 +1,4 @@
-process.env.NODE_ENV = "test";
+// process.env.NODE_ENV = "test";
 
 
 
@@ -32,12 +32,13 @@ describe('/POST user', () => {
             // console.log(res)
             res.should.have.status(200);
             res.body.should.be.a('object');
-            res.body.should.have.property('id');
-            res.body.should.have.property('email');
-            res.body.should.have.property('first_name');
-            res.body.should.have.property('last_name');
-            res.body.should.have.property('updatedAt');
-            res.body.should.have.property('createdAt');
+            res.body.should.have.property('insertId');
+            // res.body.insertId.should.equal(1);
+             res.body.should.have.property('affectedRows');
+            // res.body.should.have.property('first_name');
+            // res.body.should.have.property('last_name');
+            // res.body.should.have.property('updatedAt');
+            // res.body.should.have.property('createdAt');
             done();
         });
     });
