@@ -23,6 +23,11 @@ jobs:
             done
             echo Failed waiting for MySQL && exit 1
       - run:
+          name: Setup MySQl authentication protocol
+          command: |
+            sudo apt-get install default-mysql-client
+            mysql -h 127.0.0.1 -u root -prootpw --execute="ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'rootpw'"
+      - run:
           name: Install node_modules with npm
           command: npm install
       - save_cache:
