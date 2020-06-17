@@ -13,7 +13,8 @@ app.use(function (req, res, next) {
 });
 //Adding body parser for handling request and response objects.
 app.use(bodyParser.urlencoded({
-    extended: true
+    extended: true,
+    limit: '10mb'
 }));
 var db = mysql.createConnection({
     host: "localhost",
@@ -74,7 +75,18 @@ db.connect(function(err) {
         'FOREIGN KEY (book_id)'+
         'REFERENCES book (id)'+
         'ON UPDATE CASCADE ON DELETE CASCADE)';
-   
+    
+    let createBookImgMap = 'create table if not exists book_image_map(' +
+        'image_id int not null primary key auto_increment unique,' +
+        'book_id int,' +
+        'upload_date datetime NOT NULL,'+
+        'type varchar(255)not null,'+
+        'name varchar(255)not null,'+
+        'size double NOT NULL,'+
+        'FOREIGN KEY (book_id)'+
+        'REFERENCES book (id)'+
+        'ON UPDATE CASCADE ON DELETE CASCADE)';
+
     db.query(createUserTbl, function(err, results, fields) {
         if (err) {
             console.log(err.message);
@@ -116,9 +128,18 @@ db.connect(function(err) {
             console.log("Cart Entries table created!")
         }
     });
+    db.query(createBookImgMap, function(err, results, fields) {
+        if (err) {
+            console.log(err.message);
+        }
+        else {
+            console.log("Book image Entries table created!")
+        }
+    });
 });
 global.db = db;
-app.use(bodyParser.json());
+
+app.use(bodyParser.json({limit: '10mb', extended: true}));
 
 const initApp = require('./app/app');
 initApp(app);
