@@ -4,6 +4,7 @@ const userController = require('./../controllers/user-controller');
 const bookController = require('./../controllers/book-controller');
 const cartEntryController = require('./../controllers/cart-entry-controller');
 const cartController = require('./../controllers/cart-controller');
+const imageController = require('./../controllers/image-controller');
 const authorize = require("../middlewares/auth");
 //API's for routing to a specified request
 module.exports = (app) => {
@@ -22,6 +23,8 @@ module.exports = (app) => {
         .put(authorize,bookController.updateBook)
     app.route('/books/others')
         .get(authorize,bookController.getAllOthersBooks)
+    app.route('/book/:bookid/images')
+        .get(authorize,bookController.getBookImages)
     app.route('/cart')
         .put(authorize,cartEntryController.updateCart)
         .get(authorize,cartEntryController.getCartByUserId)
@@ -29,4 +32,6 @@ module.exports = (app) => {
         .get(authorize,cartEntryController.getCartBookDetailsByUserId)
     app.route('/cart/submit')
         .post(authorize,cartController.saveCart);
+    app.route('/image/:imagename')
+        .delete(authorize,imageController.deleteImage)
 };
