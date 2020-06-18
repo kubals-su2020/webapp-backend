@@ -5,7 +5,7 @@ const ID = properties.get('aws_access_key');
 const SECRET = properties.get('aws_secret_key');
 
 // The name of the bucket that you have created
-const BUCKET_NAME = 'webapp.akhil.rane';
+const BUCKET_NAME = properties.get('s3_bucket_name');
 
 const fs = require('fs');
 const AWS = require('aws-sdk');
