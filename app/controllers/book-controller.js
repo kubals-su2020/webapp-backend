@@ -50,22 +50,27 @@ exports.saveBook = (request, response) => {
                                         + "_" + request.body.book.imageData[i].metadata.name;
                                 // console.log(request.body.book.imageData[i].metadata)
                             }
-                            let saveImages = imageService.save(request.body,book.insertId)
-                            saveImages.then((bookImgs)=>{
-                                let images = [];
-                                for (let i in request.body.book.imageData){
-                                    // var string = request.body.book.imageData[i].image;
-                                    // // console.log(string)
-                                    // var buffer = Buffer.from(string, 'utf-8');
-                                    // console.log(buffer)
-                                    // var uploadPromise =[];
-                                    // uploadImageService.uploadFile(buffer,request.body.book.imageData[i].metadata.newName);
-                                    uploadImageService.uploadFile(request.body.book.imageData[i].image
-                                        ,request.body.book.imageData[i].metadata.newName
-                                        ,request.body.book.imageData[i].metadata.type);
-                                }
-                                result(book);
-                            })
+                            if(request.body.book.imageData.length>0){
+                                let saveImages = imageService.save(request.body,book.insertId)
+                                saveImages.then((bookImgs)=>{
+                                    let images = [];
+                                    for (let i in request.body.book.imageData){
+                                        // var string = request.body.book.imageData[i].image;
+                                        // // console.log(string)
+                                        // var buffer = Buffer.from(string, 'utf-8');
+                                        // console.log(buffer)
+                                        // var uploadPromise =[];
+                                        // uploadImageService.uploadFile(buffer,request.body.book.imageData[i].metadata.newName);
+                                        uploadImageService.uploadFile(request.body.book.imageData[i].image
+                                            ,request.body.book.imageData[i].metadata.newName
+                                            ,request.body.book.imageData[i].metadata.type);
+                                    }
+                                    result(book);
+                                })
+                            }
+                            else{
+                                result(book)
+                            }
                              
                         })
                         .catch(renderErrorResponse(response))  
@@ -231,16 +236,21 @@ exports.updateBook = (request, response) => {
                                     + "_" + i
                                     + "_" + request.body.book.imageData[i].metadata.name;
                         }
-                        let saveImages = imageService.save(request.body,bookId)
-                        saveImages.then((bookImgs)=>{
-                            let images = [];
-                            for (let i in request.body.book.imageData){
-                                uploadImageService.uploadFile(request.body.book.imageData[i].image
-                                    ,request.body.book.imageData[i].metadata.newName
-                                    ,request.body.book.imageData[i].metadata.type);
-                            }
-                            result(book);
-                        })
+                        if(request.body.book.imageData.length>0){
+                            console.log(request.body.book.imageData.length)
+                            console.log("why")
+                            let saveImages = imageService.save(request.body,bookId)
+                            saveImages.then((bookImgs)=>{
+                                let images = [];
+                                for (let i in request.body.book.imageData){
+                                    uploadImageService.uploadFile(request.body.book.imageData[i].image
+                                        ,request.body.book.imageData[i].metadata.newName
+                                        ,request.body.book.imageData[i].metadata.type);
+                                }
+                                result(book);
+                            })
+                        }
+                        else{result(book);}
                         // result(book);
                     })
                     .catch(renderErrorResponse(response))  
