@@ -4,6 +4,10 @@ let bodyParser = require('body-parser');
 
 var mysql = require('mysql');
 let port = 3000;
+
+var propertiesReader = require('properties-reader');
+var properties = propertiesReader('/tmp/config.properties');
+
 //Enabling CORS
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -17,10 +21,11 @@ app.use(bodyParser.urlencoded({
     limit: '10mb'
 }));
 var db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "test@123",
-    database: "tdb_dev"
+    host: properties.get('db_hostname'),
+    user: properties.get('db_username'),
+    password: properties.get('db_password'),
+    database: "csye6225",
+    // port: 3306
 });
 db.connect(function(err) {
     if (err) throw err;
