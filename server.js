@@ -24,8 +24,7 @@ var db = mysql.createConnection({
     host: properties.get('db_hostname'),
     user: properties.get('db_username'),
     password: properties.get('db_password'),
-    database: "csye6225",
-    // port: 3306
+    database: properties.get('db_database')
 });
 db.connect(function(err) {
     if (err) throw err;

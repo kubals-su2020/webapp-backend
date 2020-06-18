@@ -41,11 +41,22 @@ jobs:
         command: [--default-authentication-plugin=mysql_native_password]
         environment:
           MYSQL_ROOT_PASSWORD: test@123
-          MYSQL_DATABASE: tdb_dev
+          MYSQL_DATABASE: csye
           MYSQL_USER: user
           MYSQL_PASSWORD: passw0rd
     steps:
       - checkout
+      - run:
+          name: Creating test config properties file
+          command: |
+            touch /tmp/config.properties;
+            echo db_username="root" >> /tmp/config.properties;
+            echo db_password="test@123" >> /tmp/config.properties;
+            echo db_hostname="localhost" >> /tmp/config.properties;
+            echo db_databse="csye6225" >> /tmp/config.properties;
+            echo s3_bucket_name="dummy_s3_bucket_name" >> /tmp/config.properties;
+            echo aws_access_key="dummy_aws_access_key" >> /tmp/config.properties;
+            echo aws_secret_key="dummy_aws_secret_key" >> /tmp/config.properties;
       - run:
           name: Waiting for MySQL to be ready
           command: |
