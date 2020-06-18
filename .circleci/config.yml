@@ -20,7 +20,7 @@ jobs:
             echo db_username="root" >> /tmp/config.properties;
             echo db_password="test@123" >> /tmp/config.properties;
             echo db_hostname="localhost" >> /tmp/config.properties;
-            echo db_databse="csye6225" >> /tmp/config.properties;
+            echo db_database="csye6225" >> /tmp/config.properties;
             echo s3_bucket_name="dummy_s3_bucket_name" >> /tmp/config.properties;
             echo aws_access_key="dummy_aws_access_key" >> /tmp/config.properties;
             echo aws_secret_key="dummy_aws_secret_key" >> /tmp/config.properties;
@@ -65,7 +65,7 @@ jobs:
             echo db_username="root" >> /tmp/config.properties;
             echo db_password="test@123" >> /tmp/config.properties;
             echo db_hostname="localhost" >> /tmp/config.properties;
-            echo db_databse="csye6225" >> /tmp/config.properties;
+            echo db_database="csye6225" >> /tmp/config.properties;
             echo s3_bucket_name="dummy_s3_bucket_name" >> /tmp/config.properties;
             echo aws_access_key="dummy_aws_access_key" >> /tmp/config.properties;
             echo aws_secret_key="dummy_aws_secret_key" >> /tmp/config.properties;
