@@ -1,9 +1,11 @@
 var q = require('q');
-const ID = 'AKIAJSG4FNJOH4KPOFGA';
-const SECRET = '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';
+var propertiesReader = require('properties-reader');
+var properties = propertiesReader('/tmp/config.properties');
+const ID = properties.get('aws_access_key');
+const SECRET = properties.get('aws_secret_key');
 
 // The name of the bucket that you have created
-const BUCKET_NAME = 'webapp.akhil.rane';
+const BUCKET_NAME = properties.get('s3_bucket_name');
 
 const fs = require('fs');
 const AWS = require('aws-sdk');
