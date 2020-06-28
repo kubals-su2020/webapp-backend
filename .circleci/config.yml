@@ -87,8 +87,17 @@ jobs:
           paths:
               - ./node_modules
       - run:
-          name: Compiling and running unit tests
-          command: npm test
+          name: Install aws_cli
+          command: sudo apt-get -y install awscli
+      - run:
+          name: Build deployment artifact
+          command: zip -r ~/webapp_backend.zip .
+      - run:
+          name: Copy artifact to S3
+          command: aws s3 cp ~/webapp_backend.zip s3://codedeploy.shalvikubal.me
+      - run:
+          name: Deploy code
+          command: aws deploy create-deployment --application-name csye6225-webapp  --deployment-group-name csye6225-webapp-deployment --s3-location bucket=codedeploy.shalvikubal.me,bundleType=zip,key=webapp_backend.zip
 
 workflows:
   version: 2
@@ -97,8 +106,9 @@ workflows:
       - pr-check
   build-deploy:
     jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - master
+      - build
+      # - build:
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master

@@ -1,0 +1,17 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/webapp_backend
+hooks:
+  BeforeInstall:
+    - location: code_deploy/before_install.sh
+      timeout: 180
+  AfterInstall:
+    - location: code_deploy/after_install.sh
+      timeout: 180  
+  ApplicationStart:
+    - location: code_deploy/application_start.sh
+      timeout: 180
+      runas: ubuntu
+  
