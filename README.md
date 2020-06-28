@@ -29,4 +29,3 @@ Run `nodemon server.js` for a server with watcher. Server will be started on `ht
 ## Running unit tests
 
 Run `npm run test` to execute the unit tests via [mocha]
-
