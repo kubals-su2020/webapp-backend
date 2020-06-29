@@ -1,8 +1,8 @@
 var q = require('q');
 var propertiesReader = require('properties-reader');
 var properties = propertiesReader('/tmp/config.properties');
-const ID = properties.get('aws_access_key');
-const SECRET = properties.get('aws_secret_key');
+// const ID = properties.get('aws_access_key');
+// const SECRET = properties.get('aws_secret_key');
 
 // The name of the bucket that you have created
 const BUCKET_NAME = properties.get('s3_bucket_name');
@@ -10,11 +10,12 @@ const BUCKET_NAME = properties.get('s3_bucket_name');
 const fs = require('fs');
 const AWS = require('aws-sdk');
 
-const s3 = new AWS.S3({
-    accessKeyId: ID,
-    secretAccessKey: SECRET
-});
+// const s3 = new AWS.S3({
+//     accessKeyId: ID,
+//     secretAccessKey: SECRET
+// });
 
+const s3 = new AWS.S3();
 
 exports.uploadFile = (fileContent,name,type) => {
     // Setting up S3 upload parameters
