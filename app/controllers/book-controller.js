@@ -84,7 +84,7 @@ exports.saveBook = (request, response) => {
                                         uploadImageService.uploadFile(request.body.book.imageData[i].image
                                             ,request.body.book.imageData[i].metadata.newName
                                             ,request.body.book.imageData[i].metadata.type);
-                                        logger.info('Images of new book: '+ request.body.bookDetails.book.title+' uploaded to S3',{label :"book-controller"})
+                                        logger.info('Images of new book: '+ request.body.book.title+' uploaded to S3',{label :"book-controller"})
                                     }
                                     logger.info('New book: '+ request.body.book.title+' created successfully',{label :"book-controller"})
                                     result(book);
