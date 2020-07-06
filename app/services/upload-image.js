@@ -9,6 +9,14 @@ const BUCKET_NAME = properties.get('s3_bucket_name');
 
 const fs = require('fs');
 const AWS = require('aws-sdk');
+// Get the default container from winston.
+const { loggers } = require('winston')
+
+// Get the logger we configured with the id from the container.
+const logger = loggers.get('my-logger');
+
+var StatsD = require('node-statsd'),
+client = new StatsD();
 
 // const s3 = new AWS.S3({
 //     accessKeyId: ID,
@@ -18,6 +26,7 @@ const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
 exports.uploadFile = (fileContent,name,type) => {
+    let startDate = new Date();
     // Setting up S3 upload parameters
     buf = Buffer.from(fileContent.replace(/^data:image\/\w+;base64,/, ""),'base64')
     const params = {
@@ -33,8 +42,20 @@ exports.uploadFile = (fileContent,name,type) => {
     s3.putObject(params, function(err, data){
         if (err) { 
           console.log(err);
+
+          let endDate = new Date();
+          let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+          client.timing('s3.image.put', seconds);
+
+          logger.info('Error uploading data: '+ data,{label :"upload-image-service"})
           console.log('Error uploading data: ', data); 
         } else {
+
+            let endDate = new Date();
+            let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+            client.timing('s3.image.put', seconds);
+
+          logger.info('succesfully uploaded the image!',{label :"upload-image-service"})
           console.log('succesfully uploaded the image!');
         }
     });
@@ -48,7 +69,8 @@ exports.uploadFile = (fileContent,name,type) => {
 };
 
 exports.getImage = (name)=>{
-    console.log("getimage")
+    let startDate = new Date();
+    logger.info('Get image',{label :"upload-image-service"})
         // Setting up S3 upload parameters
         const params = {
             Bucket: BUCKET_NAME,
@@ -56,6 +78,11 @@ exports.getImage = (name)=>{
         };
         return new Promise( ( resolve, reject ) => {
             s3.getObject( params, ( err, result ) => {
+
+                let endDate = new Date();
+                let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+                client.timing('s3.image.get', seconds);
+
                 if ( err )
                     return reject( err );
                     // result.Body = result.Body.toString('base64')
@@ -77,6 +104,8 @@ exports.getImage = (name)=>{
 }
 
 exports.deleteImage = (name)=>{
+    let startDate = new Date();
+    logger.info('Delete image',{label :"upload-image-service"})
     console.log("deleteimage")
     const params = {
         Bucket: BUCKET_NAME,
@@ -84,6 +113,11 @@ exports.deleteImage = (name)=>{
     };
     return new Promise( ( resolve, reject ) => {
         s3.deleteObject( params, ( err, result ) => {
+
+            let endDate = new Date();
+            let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+            client.timing('s3.image.delete', seconds);
+
             if ( err )
                 return reject( err );
             resolve( result );
