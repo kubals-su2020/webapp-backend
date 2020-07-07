@@ -1,0 +1,13 @@
+[Unit]
+Description=webapp backend service
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+WorkingDirectory=/home/ubuntu/webapp_backend
+ExecStart=/usr/bin/forever server.js
+
+[Install]
+WantedBy=multi-user.target

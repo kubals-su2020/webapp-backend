@@ -16,14 +16,14 @@ jobs:
       - run:
           name: Creating test config properties file
           command: |
-            touch /home/ubuntu/config.properties;
-            echo db_username="root" >> /home/ubuntu/config.properties;
-            echo db_password="test@123" >> /home/ubuntu/config.properties;
-            echo db_hostname="localhost" >> /home/ubuntu/config.properties;
-            echo db_database="csye6225" >> /home/ubuntu/config.properties;
-            echo s3_bucket_name="dummy_s3_bucket_name" >> /home/ubuntu/config.properties;
-            echo aws_access_key="dummy_aws_access_key" >> /home/ubuntu/config.properties;
-            echo aws_secret_key="dummy_aws_secret_key" >> /home/ubuntu/config.properties;
+            touch /opt/config.properties;
+            echo db_username="root" >> /opt/config.properties;
+            echo db_password="test@123" >> /opt/config.properties;
+            echo db_hostname="localhost" >> /opt/config.properties;
+            echo db_database="csye6225" >> /opt/config.properties;
+            echo s3_bucket_name="dummy_s3_bucket_name" >> /opt/config.properties;
+            echo aws_access_key="dummy_aws_access_key" >> /opt/config.properties;
+            echo aws_secret_key="dummy_aws_secret_key" >> /opt/config.properties;
 
       - run:
           name: Waiting for MySQL to be ready
@@ -61,14 +61,14 @@ jobs:
       - run:
           name: Creating test config properties file
           command: |
-            touch /home/ubuntu/config.properties;
-            echo db_username="root" >> /home/ubuntu/config.properties;
-            echo db_password="test@123" >> /home/ubuntu/config.properties;
-            echo db_hostname="localhost" >> /home/ubuntu/config.properties;
-            echo db_database="csye6225" >> /home/ubuntu/config.properties;
-            echo s3_bucket_name="dummy_s3_bucket_name" >> /home/ubuntu/config.properties;
-            echo aws_access_key="dummy_aws_access_key" >> /home/ubuntu/config.properties;
-            echo aws_secret_key="dummy_aws_secret_key" >> /home/ubuntu/config.properties;
+            touch /opt/config.properties;
+            echo db_username="root" >> /opt/config.properties;
+            echo db_password="test@123" >> /opt/config.properties;
+            echo db_hostname="localhost" >> /opt/config.properties;
+            echo db_database="csye6225" >> /opt/config.properties;
+            echo s3_bucket_name="dummy_s3_bucket_name" >> /opt/config.properties;
+            echo aws_access_key="dummy_aws_access_key" >> /opt/config.properties;
+            echo aws_secret_key="dummy_aws_secret_key" >> /opt/config.properties;
       - run:
           name: Waiting for MySQL to be ready
           command: |
