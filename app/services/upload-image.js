@@ -1,6 +1,6 @@
 var q = require('q');
 var propertiesReader = require('properties-reader');
-var properties = propertiesReader('/tmp/config.properties');
+var properties = propertiesReader('/home/ubuntu/config.properties');
 // const ID = properties.get('aws_access_key');
 // const SECRET = properties.get('aws_secret_key');
 

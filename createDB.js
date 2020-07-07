@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 var propertiesReader = require('properties-reader');
-var properties = propertiesReader('/tmp/config.properties');
+var properties = propertiesReader('/home/ubuntu/config.properties');
 
 // First you need to create a connection to the database
 // Be sure to replace 'user' and 'password' with the correct values

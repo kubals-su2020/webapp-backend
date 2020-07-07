@@ -6,7 +6,7 @@ var mysql = require('mysql');
 let port = 3000;
 
 var propertiesReader = require('properties-reader');
-var properties = propertiesReader('/tmp/config.properties');
+var properties = propertiesReader('/home/ubuntu/config.properties');
 
 //
 // `logger` is the default container in winston, but you can also create your
