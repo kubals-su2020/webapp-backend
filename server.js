@@ -6,8 +6,35 @@ var mysql = require('mysql');
 let port = 3000;
 
 var propertiesReader = require('properties-reader');
-var properties = propertiesReader('/tmp/config.properties');
+var properties = propertiesReader('/opt/config.properties');
 
+//
+// `logger` is the default container in winston, but you can also create your
+// own containers.
+//
+const { format, loggers, transports } = require('winston')
+const { combine, timestamp, label, printf } = format;
+const myFormat = printf(({ level, message, label, timestamp }) => {
+    return `${timestamp} [${label}] ${level}: ${message}`;
+  });
+//
+// The `add` method takes a string as a unique id we can later use to retrieve
+// the logger we configured. As a second argument it takes an object to
+// configure your logger the same way we do with the `createLogger` function.
+//
+loggers.add('my-logger', {
+    format: combine(
+        timestamp(),
+        myFormat
+      ),
+  transports: [
+    new transports.File({
+        filename:'./logs/logger.log'
+    })
+  ]
+})
+// Get the logger we configured with the id from the container.
+const logger = loggers.get('my-logger');
 //Enabling CORS
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -150,4 +177,6 @@ initApp(app);
 
 module.exports = app;
 app.listen(port);
+
+logger.info('Server started on: ' + port,{label :"book-controller"})
 console.log('Server started on: ' + port);

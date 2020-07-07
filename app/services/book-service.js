@@ -1,4 +1,12 @@
 'use strict';
+// Get the default container from winston.
+const { loggers } = require('winston')
+
+// Get the logger we configured with the id from the container.
+const logger = loggers.get('my-logger');
+
+var StatsD = require('node-statsd'),
+client = new StatsD();
 // const db = require("./../../models")
 // var moment = require('moment');
 /**
@@ -8,7 +16,9 @@
  */
 
 exports.save = (bookDetails,result) => {
+    let startDate = new Date();
   let queryString = "INSERT INTO book (isbn, title, quantity, price,publication_date,created_on,updated_on,seller_id) VALUES (?,?,?,?,?,?,?,?)";
+  logger.info(queryString,{label :"book-service"})
   return new Promise( ( resolve, reject ) => {
       db.query( queryString,
           [bookDetails.book.isbn,
@@ -20,6 +30,11 @@ exports.save = (bookDetails,result) => {
             new Date(),
             bookDetails.book.seller.id],
            ( err, result ) => {
+
+            let endDate = new Date();
+            let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+            client.timing('db.book.insert', seconds);
+
           if ( err )
               return reject( err );
           resolve( result );
@@ -50,9 +65,16 @@ exports.save = (bookDetails,result) => {
  * @param user
  */
 exports.findBySellerId = (sellerId) => {
+    let startDate = new Date();
   let queryString = "SELECT * FROM book WHERE seller_id = '"+ sellerId +"'";
+  logger.info(queryString,{label :"book-service"})
   return new Promise( ( resolve, reject ) => {
       db.query( queryString, ( err, result ) => {
+
+        let endDate = new Date();
+        let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        client.timing('db.book.select.bysellerid', seconds);
+
           if ( err )
               return reject( err );
           resolve( result );
@@ -72,9 +94,16 @@ exports.findBySellerId = (sellerId) => {
  * @param user
  */
 exports.delete = (bookId) => {
+    let startDate = new Date()
   let queryString = `DELETE FROM book WHERE id = `+ bookId;
+  logger.info(queryString,{label :"book-service"})
   return new Promise( ( resolve, reject ) => {
     db.query( queryString, ( err, result ) => {
+
+        let endDate = new Date();
+        let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        client.timing('db.book.delete', seconds);
+
         if ( err )
             return reject( err );
         resolve( result );
@@ -94,7 +123,9 @@ exports.delete = (bookId) => {
  */
 
 exports.update = (bookDetails,bookId) => {
+    let startDate = new Date();
   let queryString = "UPDATE book SET isbn=?, title=?, quantity=?, price=?,publication_date=?,updated_on=? where id=?";
+  logger.info(queryString,{label :"book-service"})
   return new Promise( ( resolve, reject ) => {
       db.query( queryString,
           [bookDetails.book.isbn,
@@ -105,6 +136,11 @@ exports.update = (bookDetails,bookId) => {
             new Date(),
             bookId],
            ( err, result ) => {
+
+            let endDate = new Date();
+            let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+            client.timing('db.book.update', seconds);
+
           if ( err )
               return reject( err );
           resolve( result );
@@ -122,9 +158,16 @@ exports.update = (bookDetails,bookId) => {
  * @param user
  */
 exports.findByOtherSellers = (sellerId) => {
+    let startDate = new Date();
   let queryString = "SELECT * FROM book WHERE seller_id != '"+ sellerId +"'";
+  logger.info(queryString,{label :"book-service"})
   return new Promise( ( resolve, reject ) => {
       db.query( queryString, ( err, result ) => {
+
+        let endDate = new Date();
+        let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        client.timing('db.book.select.byothers', seconds);
+
           if ( err )
               return reject( err );
           resolve( result );
@@ -143,9 +186,16 @@ exports.findByOtherSellers = (sellerId) => {
 exports.findByBookInCartAndAdd = (cart) => {
     // console.log(cart);
     // console.log("new serv")
+    let startDate = new Date();
     let queryString = "SELECT * FROM book WHERE id = "+ cart.book_id;
+    logger.info(queryString,{label :"book-service"})
     return new Promise( ( resolve, reject ) => {
         db.query( queryString, ( err, result ) => {
+
+            let endDate = new Date();
+            let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+            client.timing('db.book.select.bybookid', seconds);
+
             if ( err )
                 return reject( err );
             // console.log(result)
@@ -163,9 +213,16 @@ exports.findByBookInCartAndAdd = (cart) => {
  */
 exports.findByBookId = (cartEntry) => {
     // console.log(cartEntry)
+    let startDate = new Date()
     let queryString = "SELECT * FROM book WHERE  id= '"+ cartEntry.book.id +"'";
+    logger.info(queryString,{label :"book-service"})
     return new Promise( ( resolve, reject ) => {
         db.query( queryString, ( err, result ) => {
+
+            let endDate = new Date();
+            let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+            client.timing('db.book.select.bybookid', seconds);
+
             if ( err )
                 return reject( err );
             cartEntry.bookWithSeller = result[0];
@@ -182,14 +239,21 @@ exports.findByBookId = (cartEntry) => {
 exports.updateBookQuantity = (cartEntry) => {
      console.log("in update book quantity")
     //  console.log(cartEntry)
+    let startDate = new Date();
     let newQuantity = cartEntry.bookWithSeller.quantity;
     newQuantity = newQuantity - cartEntry.quantity;
     let queryString = "UPDATE book SET quantity=? where id=?";
+    logger.info(queryString,{label :"book-service"})
     return new Promise( ( resolve, reject ) => {
         db.query( queryString,
             [newQuantity,
               cartEntry.bookWithSeller.id],
              ( err, result ) => {
+
+                let endDate = new Date();
+                let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+                client.timing('db.book.update.quantity', seconds);
+
             if ( err )
                 return reject( err );
             resolve( result );

@@ -1,4 +1,12 @@
 'use strict';
+// Get the default container from winston.
+const { loggers } = require('winston')
+
+// Get the logger we configured with the id from the container.
+const logger = loggers.get('my-logger');
+
+var StatsD = require('node-statsd'),
+client = new StatsD();
 /**
  * Saves the new image object.
  *
@@ -6,6 +14,7 @@
  */
 
 exports.save = (bookDetails,bookId) => {
+    let startDate = new Date()
     // console.log(bookDetails);
     //  console.log(bookDetails.book.imageData)
    let records =[];
@@ -22,10 +31,16 @@ exports.save = (bookDetails,bookId) => {
   } 
 
   let queryString = "INSERT INTO book_image_map (name,type,size,upload_date,book_id) VALUES ?";
+  logger.info(queryString,{label :"image-service"})
   return new Promise( ( resolve, reject ) => {
       db.query( queryString,
          [records] ,
            ( err, result ) => {
+
+            let endDate = new Date();
+            let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+            client.timing('db.book_image_map.insert', seconds);
+
           if ( err )
               return reject( err );
           resolve( result );
@@ -40,9 +55,16 @@ exports.save = (bookDetails,bookId) => {
  */
 
 exports.findByBookId = (BookId) => {
+    let startDate = new Date();
   let queryString = "SELECT * FROM book_image_map WHERE book_id = '"+ BookId +"'";
+  logger.info(queryString,{label :"image-service"})
   return new Promise( ( resolve, reject ) => {
       db.query( queryString, ( err, result ) => {
+
+        let endDate = new Date();
+        let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        client.timing('db.book_image_map.select.bybookid', seconds);
+        
           if ( err )
               return reject( err );
           resolve( result );
@@ -57,9 +79,16 @@ exports.findByBookId = (BookId) => {
  */
 exports.deleteByImageName = (imageName) => {
 //   console.log(imageName)
+    let startDate = new Date();
   let queryString = "DELETE FROM book_image_map WHERE name = '"+ imageName +"'";
+  logger.info(queryString,{label :"image-service"})
   return new Promise( ( resolve, reject ) => {
     db.query( queryString, ( err, result ) => {
+
+        let endDate = new Date();
+        let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        client.timing('db.book_image_map.delete', seconds);
+
         if ( err )
             return reject( err );
         resolve( result );

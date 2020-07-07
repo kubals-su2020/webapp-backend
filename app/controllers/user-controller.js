@@ -6,6 +6,15 @@ const jwt = require("jsonwebtoken");
 
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+
+// Get the default container from winston.
+const { loggers } = require('winston')
+
+// Get the logger we configured with the id from the container.
+const logger = loggers.get('my-logger');
+
+var StatsD = require('node-statsd'),
+client = new StatsD();
 /**
  * Creates a new user and sets the response.
  *
@@ -14,8 +23,12 @@ const saltRounds = 10;
  */
 //creates a new user
 exports.saveUser = (request, response) => {
-
+    let startDate = new Date();
+    logger.info('POST: new user',{label :"user-controller"})
     const result = (savedUser) => {
+        let endDate   = new Date();
+        let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        client.timing('users.post', seconds);
         response.status(200);
         response.json(savedUser);
     };
@@ -32,6 +45,7 @@ exports.saveUser = (request, response) => {
 
         promise
             .then((val)=>{
+                logger.info('New user: ' + user.first_name + ' '+ user.last_name + ' created ',{label :"user-controller"})
                 cartService.save(val)
                 result(val)
             })
@@ -48,9 +62,14 @@ exports.saveUser = (request, response) => {
  */
 //login a user
 exports.login = (request, response) => {
+    let startDate = new Date();
+    logger.info('POST: login user',{label :"user-controller"})
     let getUser;
     const promise =userService.findByUsername(request.body.user);
     const result = (user) => {
+        let endDate = new Date();
+        let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        client.timing('user.post', seconds);
         response.status(200);
         response.json(user);
     };
@@ -58,7 +77,7 @@ exports.login = (request, response) => {
     .then((val)=>{
             // console.log(val)
             if(val.length < 1){
-
+                logger.info('Authentication failed ',{label :"user-controller"})
                  response.status(401).json({
                     message: "Authentication failed"
                 });
@@ -76,6 +95,7 @@ exports.login = (request, response) => {
                         }, "longer-secret-is-better", {
                             expiresIn: "30d"
                         });
+                        logger.info('User authenticated successfully ',{label :"user-controller"})
                         response.status(200).json({
                             token: jwtToken,
                             expiresIn: "30d",
@@ -83,7 +103,7 @@ exports.login = (request, response) => {
                         });
                     }
                     else{
-                        
+                        logger.info('Authentication failed ',{label :"user-controller"})
                         response.status(401).json({
                             message: "Authentication failed"
                         });
@@ -104,18 +124,25 @@ exports.login = (request, response) => {
 //Get user profile
 
 exports.getProfile = (request, response) => {
+    let startDate = new Date();
     const promise =userService.findByUsername(request.user);
+    logger.info('GET: user profile ',{label :"user-controller"})
     const result = (user) => {
+        let endDate = new Date();
+        let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        client.timing('user.get', seconds);
         response.status(200);
         response.json(user);
     };
     promise
     .then((val)=>{
             if(val.length < 1){
+                logger.info('User not found ',{label :"user-controller"})
                 return response.status(404).json({
                     message: "User not found"
                 });
             }
+            logger.info('User '+ val[0].first_name + ' '+ val[0].last_name+' found',{label :"user-controller"})
             result(val[0]);
         })
     .catch(renderErrorResponse(response));
@@ -128,14 +155,20 @@ exports.getProfile = (request, response) => {
  */
 //Update user profile
 exports.updateProfile = (request, response) => {
+    let startDate = new Date();
+    logger.info('PUT: update user profile  ',{label :"user-controller"})
     const promise =userService.findByUsername(request.user);
     const result = (user) => {
+        let endDate = new Date();
+        let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        client.timing('user.put', seconds);
         response.status(200);
         response.json(user);
     };
     promise
     .then((val)=>{
             if(val.length < 1){
+                logger.info('User not found ',{label :"user-controller"})
                 return response.status(404).json({
                     message: "User not found"
                 });
@@ -164,6 +197,8 @@ exports.updateProfile = (request, response) => {
                     const promiseUpdate = userService.update(user1);
                     promiseUpdate
                     .then((val)=>{
+                        logger.info('User first name updated successfully to '+ user1.first_name,{label :"user-controller"})
+                        logger.info('User last name updated successfully to '+ user1.last_name,{label :"user-controller"})
                         result(val[0]);
                     })
                     .catch(renderErrorResponse(response))
@@ -180,6 +215,8 @@ exports.updateProfile = (request, response) => {
                 const promiseUpdate = userService.updateFew(user1);
                 promiseUpdate
                 .then((val)=>{
+                    logger.info('User first name updated successfully to '+ user1.first_name,{label :"user-controller"})
+                    logger.info('User last name updated successfully to '+ user1.last_name,{label :"user-controller"})
                     result(val[0]);
                 })
                 .catch(renderErrorResponse(response))
@@ -197,6 +234,7 @@ exports.updateProfile = (request, response) => {
 let renderErrorResponse = (response) => {
     const errorCallback = (error) => {
         if (error) {
+            logger.error(error.message,{label :"user-controller"})
             response.status(500);
             response.json({
                 message: error.message

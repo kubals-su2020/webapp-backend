@@ -16,14 +16,15 @@ jobs:
       - run:
           name: Creating test config properties file
           command: |
-            touch /tmp/config.properties;
-            echo db_username="root" >> /tmp/config.properties;
-            echo db_password="test@123" >> /tmp/config.properties;
-            echo db_hostname="localhost" >> /tmp/config.properties;
-            echo db_database="csye6225" >> /tmp/config.properties;
-            echo s3_bucket_name="dummy_s3_bucket_name" >> /tmp/config.properties;
-            echo aws_access_key="dummy_aws_access_key" >> /tmp/config.properties;
-            echo aws_secret_key="dummy_aws_secret_key" >> /tmp/config.properties;
+            sudo touch /opt/config.properties;
+            sudo chmod 766 /opt/config.properties;
+            sudo echo db_username="root" >> /opt/config.properties;
+            sudo echo db_password="test@123" >> /opt/config.properties;
+            sudo echo db_hostname="localhost" >> /opt/config.properties;
+            sudo echo db_database="csye6225" >> /opt/config.properties;
+            sudo echo s3_bucket_name="dummy_s3_bucket_name" >> /opt/config.properties;
+            sudo echo aws_access_key="dummy_aws_access_key" >> /opt/config.properties;
+            sudo echo aws_secret_key="dummy_aws_secret_key" >> /opt/config.properties;
 
       - run:
           name: Waiting for MySQL to be ready
@@ -61,14 +62,15 @@ jobs:
       - run:
           name: Creating test config properties file
           command: |
-            touch /tmp/config.properties;
-            echo db_username="root" >> /tmp/config.properties;
-            echo db_password="test@123" >> /tmp/config.properties;
-            echo db_hostname="localhost" >> /tmp/config.properties;
-            echo db_database="csye6225" >> /tmp/config.properties;
-            echo s3_bucket_name="dummy_s3_bucket_name" >> /tmp/config.properties;
-            echo aws_access_key="dummy_aws_access_key" >> /tmp/config.properties;
-            echo aws_secret_key="dummy_aws_secret_key" >> /tmp/config.properties;
+            sudo touch /opt/config.properties;
+            sudo chmod 766 /opt/config.properties;
+            sudo echo db_username="root" >> /opt/config.properties;
+            sudo echo db_password="test@123" >> /opt/config.properties;
+            sudo echo db_hostname="localhost" >> /opt/config.properties;
+            sudo echo db_database="csye6225" >> /opt/config.properties;
+            sudo echo s3_bucket_name="dummy_s3_bucket_name" >> /opt/config.properties;
+            sudo echo aws_access_key="dummy_aws_access_key" >> /opt/config.properties;
+            sudo echo aws_secret_key="dummy_aws_secret_key" >> /opt/config.properties;
       - run:
           name: Waiting for MySQL to be ready
           command: |

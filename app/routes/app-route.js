@@ -5,9 +5,12 @@ const bookController = require('./../controllers/book-controller');
 const cartEntryController = require('./../controllers/cart-entry-controller');
 const cartController = require('./../controllers/cart-controller');
 const imageController = require('./../controllers/image-controller');
+const testController = require('./../controllers/test-controller');
 const authorize = require("../middlewares/auth");
 //API's for routing to a specified request
 module.exports = (app) => {
+    app.route('/test')
+        .get(testController.test)
     app.route('/users')
         .post(userController.saveUser)
     app.route('/user')
