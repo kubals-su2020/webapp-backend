@@ -178,5 +178,5 @@ initApp(app);
 module.exports = app;
 app.listen(port);
 
-logger.info('Server started on: ' + port,{label :"book-controller"})
+logger.info('Server started on: ' + port,{label :"server"})
 console.log('Server started on: ' + port);
