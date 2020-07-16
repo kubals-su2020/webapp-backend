@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const tokenService = require('./../services/token-service');
 
 module.exports = (req, res, next) => {
     try {
@@ -8,9 +9,38 @@ module.exports = (req, res, next) => {
                 return res.sendStatus(403);
             }
             req.user = user;
-            next();
+            let getTokenPromise = tokenService.getTokenUserId(user.userId);
+            getTokenPromise
+            .then((val)=>{
+                if(token == val[0].token){
+                    next();
+                }
+                else{
+                    res.status(401).json({ message: "Authentication failed!" });
+                }
+            })
+            .catch(renderErrorResponse(res))
+            
         });
     } catch (error) {
         res.status(401).json({ message: "Authentication failed!" });
     }
+};
+/**
+ * Throws error if error object is present.
+ *
+ * @param {Response} response The response object
+ * @return {Function} The error handler function.
+ */
+let renderErrorResponse = (response) => {
+    const errorCallback = (error) => {
+        if (error) {
+            logger.error(error.message,{label :"middleware-auth"})
+            response.status(500);
+            response.json({
+                message: error.message
+            });
+        }
+    };
+    return errorCallback;
 };

@@ -237,7 +237,7 @@ exports.findByBookId = (cartEntry) => {
  * @param user
  */
 exports.updateBookQuantity = (cartEntry) => {
-     console.log("in update book quantity")
+    //  console.log("in update book quantity")
     //  console.log(cartEntry)
     let startDate = new Date();
     let newQuantity = cartEntry.bookWithSeller.quantity;

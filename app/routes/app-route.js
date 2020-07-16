@@ -11,6 +11,8 @@ const authorize = require("../middlewares/auth");
 module.exports = (app) => {
     app.route('/test')
         .get(testController.test)
+    app.route('/logout')
+        .post(authorize,userController.logout)
     app.route('/users')
         .post(userController.saveUser)
     app.route('/user')
