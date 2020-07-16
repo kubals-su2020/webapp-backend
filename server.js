@@ -176,13 +176,13 @@ const initApp = require('./app/app');
 initApp(app);
 
 module.exports = app;
-HOST="localhost"
-app.listen(port, HOST, function(err) {
-    if (err) return logger.error(err);
-    logger.info('Server started on: ' + port,{label :"server"})
-    console.log("Listening at http://%s:%s", HOST, port);
-  });
-// app.listen(port);
+// HOST="localhost"
+// app.listen(port, HOST, function(err) {
+//     if (err) return logger.error(err);
+//     logger.info('Server started on: ' + port,{label :"server"})
+//     console.log("Listening at http://%s:%s", HOST, port);
+//   });
+app.listen(port);
 
-// logger.info('Server started on: ' + port,{label :"server"})
+logger.info('Server started on: ' + port,{label :"server"})
 // console.log('Server started on: ' + port);
