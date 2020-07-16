@@ -117,7 +117,19 @@ db.connect(function(err) {
         'FOREIGN KEY (book_id)'+
         'REFERENCES book (id)'+
         'ON UPDATE CASCADE ON DELETE CASCADE)';
-        
+        // let createEmailTokenMap = 'create table if not exists email_token_map(' +
+        // 'id int not null primary key auto_increment unique,' +
+        // 'user_id int not null unique,' +
+        // 'token varchar(255) not null,'+
+        // 'FOREIGN KEY (user_id)'+
+        // 'REFERENCES user (id)'+
+        // 'ON UPDATE CASCADE ON DELETE CASCADE)';
+    let createEmailTokenMap = 'create table if not exists email_token_map(' +
+        'user_id int not null primary key unique,' +
+        'token varchar(255) not null,'+
+        'FOREIGN KEY (user_id)'+
+        'REFERENCES user (id)'+
+        'ON UPDATE CASCADE ON DELETE CASCADE)';
 
     db.query(createUserTbl, function(err, results, fields) {
         if (err) {
@@ -166,6 +178,14 @@ db.connect(function(err) {
         }
         else {
             console.log("Book image Entries table created!")
+        }
+    });
+    db.query(createEmailTokenMap, function(err, results, fields) {
+        if (err) {
+            console.log(err.message);
+        }
+        else {
+            console.log("Email token map table created!")
         }
     });
 });

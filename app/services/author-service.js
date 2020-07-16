@@ -45,7 +45,7 @@ exports.save = (bookDetails,bookId) => {
  */
 exports.deleteByBookId = (bookId) => {
     let startDate = new Date();
-    console.log(bookId)
+    // console.log(bookId)
     let queryString = 'DELETE FROM author WHERE book_id = '+ bookId;
     logger.info(queryString,{label :"author-service"})
     return new Promise( ( resolve, reject ) => {

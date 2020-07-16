@@ -15,7 +15,7 @@ client = new StatsD();
  */
 
 exports.save = (cartEntry,cartId) => {
-    console.log(cartEntry)
+    // console.log(cartEntry)
     let startDate = new Date();
     // console.log("in service")
     // console.log(cartEntry)
@@ -25,7 +25,7 @@ exports.save = (cartEntry,cartId) => {
         return new Promise( ( resolve, reject ) => {
             logger.info("quantity:"+cartEntry.quantity+",bookid:"+cartEntry.book.id+",buyerid/cartid:"+cartId,{label :"cart-entry-service"})
             db.query( queryString,[cartEntry.quantity,cartEntry.book.id,cartId], ( err, rows ) => {
-                
+                // console.log("done")
                 let endDate = new Date();
                 let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
                 client.timing('db.cartentry.insert', seconds);
@@ -63,7 +63,7 @@ exports.save = (cartEntry,cartId) => {
  */
 
 exports.deleteEntryFromCart = (cartEntry) => {
-    console.log(cartEntry)
+    // console.log(cartEntry)
     let startDate = new Date();
     let queryString = 'DELETE FROM cart_entry WHERE book_id = '+ cartEntry.bookWithSeller.id +' AND cart_id ='+cartEntry.cart_id ;
     logger.info(queryString,{label :"cart-entry-service"})

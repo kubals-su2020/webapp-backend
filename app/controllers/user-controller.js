@@ -2,6 +2,7 @@
 
 const userService = require('./../services/user-service');
 const cartService = require('./../services/cart-service');
+const tokenService = require('./../services/token-service');
 const jwt = require("jsonwebtoken");
 
 const bcrypt = require('bcrypt');
@@ -86,21 +87,29 @@ exports.login = (request, response) => {
             else{
                
                 getUser = val[0];
+                // console.log(val[0])
                  bcrypt.compare(request.body.user.password, val[0].hashed_password,function(err,res){
                     if(res){
 
                         let jwtToken = jwt.sign({
                             email: getUser.email,
-                            userId: getUser._id
+                            userId: getUser.id
                         }, "longer-secret-is-better", {
                             expiresIn: "30d"
                         });
-                        logger.info('User authenticated successfully ',{label :"user-controller"})
-                        response.status(200).json({
-                            token: jwtToken,
-                            expiresIn: "30d",
-                            msg: getUser
-                        });
+                        // console.log(jwtToken)
+                        let tokenPromise = tokenService.save(jwtToken,getUser.id);
+                        tokenPromise
+                        .then((val)=>{
+                            logger.info('User authenticated successfully ',{label :"user-controller"})
+                            response.status(200).json({
+                                token: jwtToken,
+                                expiresIn: "30d",
+                                msg: getUser
+                            });
+                        })
+                        .catch(renderErrorResponse(response))
+
                     }
                     else{
                         logger.info('Authentication failed ',{label :"user-controller"})
@@ -225,6 +234,35 @@ exports.updateProfile = (request, response) => {
         })
     .catch(renderErrorResponse(response));
 };
+
+
+/**
+ * Creates a new user and sets the response.
+ *
+ * @param request
+ * @param response
+ */
+//creates a new user
+exports.logout = (request, response) => {
+    let startDate = new Date();
+    logger.info('POST: logout user',{label :"user-controller"})
+    const result = (savedUser) => {
+        let endDate   = new Date();
+        let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        client.timing('user.logout', seconds);
+        response.status(200);
+        response.json({"msg":"User logged out successfully!"});
+    };
+    let logoutTokenPromise = tokenService.deleteTokenUserId(request.user.userId);
+    logoutTokenPromise
+    .then((val)=>{
+        result();
+    })
+    .catch(renderErrorResponse(response))
+};
+
+
+
 /**
  * Throws error if error object is present.
  *
