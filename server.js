@@ -37,7 +37,7 @@ loggers.add('my-logger', {
 const logger = loggers.get('my-logger');
 //Enabling CORS
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", 'http://'+properties.get('domain_name'));
+    res.header("Access-Control-Allow-Origin", '*');
     res.header("Access-Control-Allow-Methods"," POST, PUT, GET, DELETE, OPTIONS");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept , Authorization");
     next();
@@ -117,6 +117,7 @@ db.connect(function(err) {
         'FOREIGN KEY (book_id)'+
         'REFERENCES book (id)'+
         'ON UPDATE CASCADE ON DELETE CASCADE)';
+        
 
     db.query(createUserTbl, function(err, results, fields) {
         if (err) {

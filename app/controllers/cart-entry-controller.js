@@ -41,11 +41,16 @@ exports.updateCart = (request, response) => {
             }
             else{
                 //  console.log(val[0])
-                const cartEntryPromise = cartEntryService.save(request.body);
-                cartEntryPromise
+                const cartServicePromise = cartService.getCartByUserId(val[0]);
+                cartServicePromise
                 .then((cart)=>{
-                    logger.info('Cart: ' + request.body.buyer.id+ ' updated successfully for book:'+request.body.book.id,{label :"cart-entry-controller"})
-                    result(cart)
+                    const cartEntryPromise = cartEntryService.save(request.body,cart[0].id);
+                    cartEntryPromise
+                    .then((cart)=>{
+                        logger.info('Cart: ' + request.body.buyer.id+ ' updated successfully for book:'+request.body.book.id,{label :"cart-entry-controller"})
+                        result(cart)
+                    })
+                    .catch(renderErrorResponse(response))
                 })
                 .catch(renderErrorResponse(response))
             }
