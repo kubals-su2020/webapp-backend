@@ -1,6 +1,10 @@
 const jwt = require("jsonwebtoken");
 const tokenService = require('./../services/token-service');
+// Get the default container from winston.
+const { loggers } = require('winston')
 
+// Get the logger we configured with the id from the container.
+const logger = loggers.get('my-logger');
 module.exports = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(" ")[1];
