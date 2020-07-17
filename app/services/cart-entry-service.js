@@ -37,7 +37,7 @@ exports.save = (cartEntry,cartId) => {
         } );
     }
     else{
-        let queryString = 'DELETE FROM cart_entry WHERE book_id = '+ cartEntry.book.id +' AND cart_id ='+cartEntry.buyer.id ;
+        let queryString = 'DELETE FROM cart_entry WHERE book_id = '+ cartEntry.book.id +' AND cart_id ='+cartId ;
         logger.info(queryString,{label :"cart-entry-service"})
         return new Promise( ( resolve, reject ) => {
           db.query( queryString, ( err, result ) => {
