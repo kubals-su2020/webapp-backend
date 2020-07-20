@@ -272,12 +272,12 @@ exports.logout = (request, response) => {
 exports.resetPassword = (request, response) => {
     let startDate = new Date();
     logger.info('POST: send reset password link',{label :"user-controller"})
-    const result = (savedUser) => {
+    const result = (snsResult) => {
         let endDate   = new Date();
         let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
         client.timing('user.resetpassword', seconds);
         response.status(200);
-        response.json({"msg":"Reset password link sent successfully!"});
+        response.json(snsResult);
     };
     let userPromise = userService.findByUsername(request.body.user);
     userPromise
@@ -294,11 +294,14 @@ exports.resetPassword = (request, response) => {
                 let token = buf.toString('hex');
                 console.log(token)
                 let resetPasswordPromise = resetPasswordService.resetPassword(request.body.user,token);
-                // resetPasswordPromise
-                // .then((rs)=>{
-                //     console.log(rs)
-                // })
-                // .catch(renderErrorResponse(response))
+                resetPasswordPromise
+                .then((rs)=>{
+                    logger.info('requestID for sns is :'+rs.ResponseMetadata.RequestId,{label :"user-controller"})
+                    logger.info('MessageID for sns is :'+rs.MessageId,{label :"user-controller"})
+                    console.log(rs)
+                    result(rs);
+                })
+                .catch(renderErrorResponse(response))
             });
             // token = crypto.randomBytes(32).toString('hex')
             // console.log(token)
