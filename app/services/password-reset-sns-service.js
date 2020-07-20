@@ -9,20 +9,11 @@ const { loggers } = require('winston')
 const logger = loggers.get('my-logger');
 
 
-AWS.config.update({
-    accessKeyId: 'AKIAJSG4FNJOH4KPOFGA',
-    secretAccessKey: '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',
-    region: 'us-east-1',
-   });
- 
-
-
-
 // Set region
 AWS.config.update({region: 'us-east-1'});
 let ttl = 900;
-// let arn = properties.get('target_arn');
-let arn = 'arn:aws:sns:us-east-1:270462421134:password_reset'
+let arn = properties.get('target_arn');
+
 
 exports.resetPassword = (user,token) => {
     // Create publish parameters
