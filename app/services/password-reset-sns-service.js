@@ -1,5 +1,6 @@
 // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
+var propertiesReader = require('properties-reader');
 var properties = propertiesReader('/opt/config.properties');
 
 // AWS.config.update({
