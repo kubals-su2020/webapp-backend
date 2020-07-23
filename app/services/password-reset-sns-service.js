@@ -7,10 +7,10 @@ const { loggers } = require('winston')
 
 // Get the logger we configured with the id from the container.
 const logger = loggers.get('my-logger');
-
+let region = properties.get('region');
 
 // Set region
-AWS.config.update({region: 'us-east-1'});
+AWS.config.update({region: region});
 let ttl = 900;
 let arn = properties.get('target_arn');
 
