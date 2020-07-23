@@ -10,7 +10,7 @@ const logger = loggers.get('my-logger');
 
 
 // Set region
-// AWS.config.update({region: 'us-east-1'});
+AWS.config.update({region: 'us-east-1'});
 let ttl = 900;
 let arn = properties.get('target_arn');
 
