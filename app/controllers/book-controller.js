@@ -416,6 +416,7 @@ exports.getBookImages = (request, response) =>{
                 });
             }
             else{
+                
                 let imagesFetchedPromise = [];
                 for(let i in val){
                     let name = val[i].name;

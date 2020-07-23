@@ -3,6 +3,7 @@
 const userService = require('./../services/user-service');
 const cartService = require('./../services/cart-service');
 const tokenService = require('./../services/token-service');
+const resetPasswordService = require('./../services/password-reset-sns-service');
 const jwt = require("jsonwebtoken");
 
 const bcrypt = require('bcrypt');
@@ -237,12 +238,12 @@ exports.updateProfile = (request, response) => {
 
 
 /**
- * Creates a new user and sets the response.
+ * logout user and sets the response.
  *
  * @param request
  * @param response
  */
-//creates a new user
+//logout a new user
 exports.logout = (request, response) => {
     let startDate = new Date();
     logger.info('POST: logout user',{label :"user-controller"})
@@ -261,6 +262,54 @@ exports.logout = (request, response) => {
     .catch(renderErrorResponse(response))
 };
 
+/**
+ * Send reset password link sets the response.
+ *
+ * @param request
+ * @param response
+ */
+//send reset password link
+exports.resetPassword = (request, response) => {
+    let startDate = new Date();
+    logger.info('POST: send reset password link',{label :"user-controller"})
+    const result = (snsResult) => {
+        let endDate   = new Date();
+        let seconds = (endDate.getTime() - startDate.getTime()) / 1000;
+        client.timing('user.resetpassword', seconds);
+        response.status(200);
+        response.json(snsResult);
+    };
+    let userPromise = userService.findByUsername(request.body.user);
+    userPromise
+    .then((val)=>{
+        if(val.length < 1){
+            console.log("not found")
+            logger.info('Email address not found ',{label :"user-controller"})
+             response.status(200).json({
+                message: "Email address not found"
+            });
+        }
+        else{
+            require('crypto').randomBytes(32, function(ex, buf) {
+                let token = buf.toString('hex');
+                console.log(token)
+                let resetPasswordPromise = resetPasswordService.resetPassword(request.body.user,token);
+                resetPasswordPromise
+                .then((rs)=>{
+                    logger.info('requestID for sns is :'+rs.ResponseMetadata.RequestId,{label :"user-controller"})
+                    logger.info('MessageID for sns is :'+rs.MessageId,{label :"user-controller"})
+                    console.log(rs)
+                    result(rs);
+                })
+                .catch(renderErrorResponse(response))
+            });
+            // token = crypto.randomBytes(32).toString('hex')
+            // console.log(token)
+        }
+        // result();
+    })
+    .catch(renderErrorResponse(response))
+};
 
 
 /**

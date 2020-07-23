@@ -36,7 +36,10 @@ module.exports = (app) => {
     app.route('/cart/details')
         .get(authorize,cartEntryController.getCartBookDetailsByUserId)
     app.route('/cart/submit')
-        .post(authorize,cartController.saveCart);
+        .post(authorize,cartController.saveCart)
     app.route('/image/:imagename')
         .delete(authorize,imageController.deleteImage)
+    app.route('/resetpassword')
+        .post(userController.resetPassword)
+
 };
