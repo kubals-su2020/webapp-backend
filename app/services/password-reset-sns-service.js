@@ -9,6 +9,8 @@ const { loggers } = require('winston')
 const logger = loggers.get('my-logger');
 let region = properties.get('region');
 
+const { v4: uuidv4 } = require('uuid');
+
 // Set region
 AWS.config.update({region: region});
 let ttl = 900;
@@ -18,7 +20,7 @@ let arn = properties.get('target_arn');
 exports.resetPassword = (user,token) => {
     // Create publish parameters
     var params = {
-        Message: user.email+':' + token + ":" + ttl , /* required */
+        Message: user.email+':' + token + ":" + ttl + ":" + uuidv4(), /* required */
         TopicArn: arn
     };
     logger.info("Entered reset password sns service ",{label :"password-reset-sns-service"})
