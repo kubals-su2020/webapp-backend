@@ -51,7 +51,8 @@ var db = mysql.createConnection({
     host: properties.get('db_hostname'),
     user: properties.get('db_username'),
     password: properties.get('db_password'),
-    database: properties.get('db_database')
+    database: properties.get('db_database'),
+    ssl: 'Amazon RDS',
 });
 db.connect(function(err) {
     if (err) throw err;

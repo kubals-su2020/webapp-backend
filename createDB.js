@@ -8,7 +8,8 @@ const con = mysql.createConnection({
     host: properties.get('db_hostname'),
     user: properties.get('db_username'),
     password: properties.get('db_password'),
-    port: 3306
+    port: 3306,
+    ssl: 'Amazon RDS',
 });
 
 con.connect((err) => {
