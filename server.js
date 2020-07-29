@@ -81,7 +81,7 @@ db.connect(function(err) {
         }
         else{
             logger.info("ssl success",{label :"server"})
-            logger.info(result,{label :"server"})
+            logger.info(result)
         }
     })
     let createUserTbl = 'create table if not exists user(' +
