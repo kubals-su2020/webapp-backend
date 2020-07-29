@@ -47,13 +47,24 @@ app.use(bodyParser.urlencoded({
     extended: true,
     limit: '10mb'
 }));
-var db = mysql.createConnection({
-    host: properties.get('db_hostname'),
-    user: properties.get('db_username'),
-    password: properties.get('db_password'),
-    database: properties.get('db_database'),
-    ssl: 'Amazon RDS'
-});
+var db;
+if(process.env.ENVIRONMENT == 'test'){
+     db = mysql.createConnection({
+        host: properties.get('db_hostname'),
+        user: properties.get('db_username'),
+        password: properties.get('db_password'),
+        database: properties.get('db_database')
+    });
+}
+else{
+     db = mysql.createConnection({
+        host: properties.get('db_hostname'),
+        user: properties.get('db_username'),
+        password: properties.get('db_password'),
+        database: properties.get('db_database'),
+        ssl: 'Amazon RDS'
+    });
+}
 db.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
