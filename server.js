@@ -76,12 +76,12 @@ db.connect(function(err) {
 
     db.query(sql, function (err, result) {
         if(err){
-            logger.info("ssl error",{label :"server"})
+            logger.info("mySQL query :show status like 'Ssl_version",{label :"server"})
             logger.info(err,{label :"server"})
         }
         else{
             logger.info("ssl success",{label :"server"})
-            logger.info(result)
+            logger.info(JSON.stringify(result[0]),{label:"server"});
         }
     })
     let createUserTbl = 'create table if not exists user(' +
