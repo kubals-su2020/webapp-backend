@@ -1,15 +1,28 @@
 const mysql = require('mysql');
 var propertiesReader = require('properties-reader');
 var properties = propertiesReader('/opt/config.properties');
-
+const con;
 // First you need to create a connection to the database
 // Be sure to replace 'user' and 'password' with the correct values
-const con = mysql.createConnection({
-    host: properties.get('db_hostname'),
-    user: properties.get('db_username'),
-    password: properties.get('db_password'),
-    port: 3306
-});
+if(process.env.ENVIRONMENT == 'test'){
+     con = mysql.createConnection({
+        host: properties.get('db_hostname'),
+        user: properties.get('db_username'),
+        password: properties.get('db_password'),
+        port: 3306
+    });
+}
+else{
+     con = mysql.createConnection({
+        host: properties.get('db_hostname'),
+        user: properties.get('db_username'),
+        password: properties.get('db_password'),
+        port: 3306,
+        ssl: 'Amazon RDS'
+    });
+}
+
+
 
 con.connect((err) => {
     if (err) throw err;

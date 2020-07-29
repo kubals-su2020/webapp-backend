@@ -47,12 +47,24 @@ app.use(bodyParser.urlencoded({
     extended: true,
     limit: '10mb'
 }));
-var db = mysql.createConnection({
-    host: properties.get('db_hostname'),
-    user: properties.get('db_username'),
-    password: properties.get('db_password'),
-    database: properties.get('db_database')
-});
+var db;
+if(process.env.ENVIRONMENT == 'test'){
+     db = mysql.createConnection({
+        host: properties.get('db_hostname'),
+        user: properties.get('db_username'),
+        password: properties.get('db_password'),
+        database: properties.get('db_database')
+    });
+}
+else{
+     db = mysql.createConnection({
+        host: properties.get('db_hostname'),
+        user: properties.get('db_username'),
+        password: properties.get('db_password'),
+        database: properties.get('db_database'),
+        ssl: 'Amazon RDS'
+    });
+}
 db.connect(function(err) {
     if (err) throw err;
     console.log("Connected!");
@@ -60,7 +72,18 @@ db.connect(function(err) {
     //     if (err) throw err;
     //     console.log("Database created");
     // });
-    
+    let sql= "show status like 'Ssl_version'";
+
+    db.query(sql, function (err, result) {
+        if(err){
+            logger.info("mySQL query :show status like 'Ssl_version",{label :"server"})
+            logger.info(err,{label :"server"})
+        }
+        else{
+            logger.info("ssl success",{label :"server"})
+            logger.info(JSON.stringify(result[0]),{label:"server"});
+        }
+    })
     let createUserTbl = 'create table if not exists user(' +
         'id int not null primary key auto_increment unique,' +
         'first_name varchar(255)not null,' +
