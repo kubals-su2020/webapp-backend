@@ -74,7 +74,7 @@ db.connect(function(err) {
     // });
     let sql= "show status like 'Ssl_version'";
 
-    connection.query(sql, function (err, result) {
+    db.query(sql, function (err, result) {
         if(err){
             logger.info("ssl error",{label :"server"})
             logger.info(err,{label :"server"})
